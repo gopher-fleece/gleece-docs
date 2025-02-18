@@ -6,7 +6,7 @@ import type * as Preset from '@docusaurus/preset-classic';
 
 const config: Config = {
   title: 'Gleece',
-  tagline: 'The Golang tool for building, documenting, validating securing and customizing APIs through code-first development.',
+  tagline: 'The Golang tool for building, documenting, validating, securing and customizing APIs through code-first development.',
   favicon: 'img/favicon.ico',
 
   // Set the production url of your site here

@@ -16,14 +16,37 @@ const FeatureList: FeatureItem[] = [
       <svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
         {/* Code editor window */}
         <rect x="30" y="40" width="140" height="120" rx="8" fill="#E8F5FF" stroke="#1877F2" strokeWidth="2"/>
-        {/* Window controls */}
-        <circle cx="45" cy="55" r="3" fill="#1877F2" opacity="0.5"/>
-        <circle cx="55" cy="55" r="3" fill="#1877F2" opacity="0.5"/>
-        <circle cx="65" cy="55" r="3" fill="#1877F2" opacity="0.5"/>
+        {/* Window controls - now with animation */}
+        <circle cx="52" cy="118" r="2.5">
+          <animate
+            attributeName="fill"
+            values="#1877F2;rgba(24,119,242,0.2);#1877F2"
+            dur="2s"
+            repeatCount="indefinite"
+          />
+        </circle>
+        <circle cx="62" cy="118" r="2.5">
+          <animate
+            attributeName="fill"
+            values="#1877F2;rgba(24,119,242,0.2);#1877F2"
+            dur="2s"
+            begin="0.5s"
+            repeatCount="indefinite"
+          />
+        </circle>
+        <circle cx="72" cy="118" r="2.5">
+          <animate
+            attributeName="fill"
+            values="#1877F2;rgba(24,119,242,0.2);#1877F2"
+            dur="2s"
+            begin="1s"
+            repeatCount="indefinite"
+          />
+        </circle>
         {/* Function code */}
-        <text x="43" y="95" fill="#1877F2" fontSize="12" fontFamily="monospace">func myLogic() &#123;</text>
-        <text x="48" y="115" fill="#1877F2" fontSize="12" fontFamily="monospace">  println("Gleece")</text>
-        <text x="43" y="135" fill="#1877F2" fontSize="12" fontFamily="monospace">&#125;</text>
+        <text x="43" y="80" fill="#1877F2" fontSize="12" fontFamily="monospace">func Logic() &#123;</text>
+        <text x="48" y="102" fill="#1877F2" fontSize="12" fontFamily="monospace">  println("Gleece")</text>
+        <text x="42" y="140" fill="#1877F2" fontSize="12" fontFamily="monospace">&#125;</text>
       </svg>
     ),
     description: (
@@ -42,7 +65,7 @@ const FeatureList: FeatureItem[] = [
         <rect x="65" y="50" width="70" height="20" rx="2" fill="white" stroke="#1877F2" strokeWidth="2"/>
         <rect x="65" y="80" width="70" height="20" rx="2" fill="white" stroke="#1877F2" strokeWidth="2"/>
         <rect x="65" y="110" width="70" height="20" rx="2" fill="white" stroke="#1877F2" strokeWidth="2"/>
-        {/* Blinking LED - using animation */}
+        {/* All LEDs blinking */}
         <circle cx="75" cy="60" r="3">
           <animate
             attributeName="fill"
@@ -51,9 +74,24 @@ const FeatureList: FeatureItem[] = [
             repeatCount="indefinite"
           />
         </circle>
-        {/* Status LEDs */}
-        <circle cx="75" cy="90" r="3" fill="#1877F2"/>
-        <circle cx="75" cy="120" r="3" fill="#1877F2"/>
+        <circle cx="75" cy="90" r="3">
+          <animate
+            attributeName="fill"
+            values="#1877F2;#E8F5FF;#1877F2"
+            dur="2s"
+            repeatCount="indefinite"
+            begin="0.5s"
+          />
+        </circle>
+        <circle cx="75" cy="120" r="3">
+          <animate
+            attributeName="fill"
+            values="#1877F2;#E8F5FF;#1877F2"
+            dur="2s"
+            repeatCount="indefinite"
+            begin="1s"
+          />
+        </circle>
         {/* Ventilation holes */}
         <line x1="120" y1="55" x2="130" y2="55" stroke="#1877F2" strokeWidth="1"/>
         <line x1="120" y1="60" x2="130" y2="60" stroke="#1877F2" strokeWidth="1"/>
@@ -78,16 +116,48 @@ const FeatureList: FeatureItem[] = [
     title: 'Built For Customization',
     Svg: () => (
       <svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-        {/* Template customization visualization */}
-        <rect x="40" y="40" width="120" height="120" rx="8" fill="#E8F5FF" />
-        {/* Template structure */}
-        <path d="M60 60H140M60 80H120M60 100H130" stroke="#1877F2" strokeWidth="4" strokeLinecap="round" />
-        {/* Customization controls */}
-        <circle cx="140" cy="140" r="15" fill="#1877F2" />
-        <circle cx="100" cy="140" r="15" fill="#1877F2" opacity="0.6" />
-        <circle cx="60" cy="140" r="15" fill="#1877F2" opacity="0.3" />
-        {/* Edit pencil icon */}
-        <path d="M135 135L145 145M145 135L135 145" stroke="white" strokeWidth="2" />
+        {/* Main template window */}
+        <rect x="50" y="40" width="100" height="120" rx="8" fill="#E8F5FF" stroke="#1877F2" strokeWidth="2"/>
+        
+        {/* Double curly braces - left side */}
+        <path d="M70 70 Q60 70 60 80 L60 95 Q60 100 55 100 Q60 100 60 105 L60 120 Q60 130 70 130" 
+              fill="none" stroke="#1877F2" strokeWidth="2"/>
+        <path d="M85 70 Q75 70 75 80 L75 95 Q75 100 70 100 Q75 100 75 105 L75 120 Q75 130 85 130" 
+              fill="none" stroke="#1877F2" strokeWidth="2"/>
+
+        {/* Double curly braces - right side */}
+        <path d="M115 70 Q125 70 125 80 L125 95 Q125 100 130 100 Q125 100 125 105 L125 120 Q125 130 115 130" 
+              fill="none" stroke="#1877F2" strokeWidth="2"/>
+        <path d="M130 70 Q140 70 140 80 L140 95 Q140 100 145 100 Q140 100 140 105 L140 120 Q140 130 130 130" 
+              fill="none" stroke="#1877F2" strokeWidth="2"/>
+
+        {/* Blinking dots - smaller size */}
+        <circle cx="93" cy="100" r="2.5">
+          <animate
+            attributeName="fill"
+            values="#1877F2;#E8F5FF;#1877F2"
+            dur="2s"
+            repeatCount="indefinite"
+          />
+        </circle>
+        <circle cx="100" cy="100" r="2.5">
+          <animate
+            attributeName="fill"
+            values="#1877F2;#E8F5FF;#1877F2"
+            dur="2s"
+            begin="0.5s"
+            repeatCount="indefinite"
+          />
+        </circle>
+        <circle cx="107" cy="100" r="2.5">
+          <animate
+            attributeName="fill"
+            values="#1877F2;#E8F5FF;#1877F2"
+            dur="2s"
+            begin="1s"
+            repeatCount="indefinite"
+          />
+        </circle>
       </svg>
     ),
     description: (

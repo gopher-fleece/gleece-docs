@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkgleece_docs=self.webpackChunkgleece_docs||[]).push([[560],{1376:e=>{e.exports=JSON.parse('{"metadata":{"permalink":"/gleece-docs/blog","page":1,"postsPerPage":10,"totalPages":1,"totalCount":4,"blogDescription":"Blog","blogTitle":"Blog"}}')}}]);

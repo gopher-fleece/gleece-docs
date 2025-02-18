@@ -81,6 +81,11 @@ const config: Config = {
           position: 'left',
           label: 'Docs',
         },
+        // Add the search bar position here
+        {
+          type: 'search',
+          position: 'left',
+        },
         // {to: '/blog', label: 'Blog', position: 'left'},
         {
           href: 'https://github.com/gopher-fleece/gleece',
@@ -139,6 +144,19 @@ const config: Config = {
       darkTheme: prismThemes.dracula,
     },
   } satisfies Preset.ThemeConfig,
+
+  themes: [
+    [
+      "@easyops-cn/docusaurus-search-local",
+      {
+        hashed: true,
+        language: ["en"],
+        highlightSearchTermsOnTargetPage: true,
+        explicitSearchResultPath: true,
+        docsRouteBasePath: "/docs",
+      },
+    ],
+  ],
 };
 
 export default config;

@@ -1,0 +1,57 @@
+---
+sidebar_position: 3
+---
+
+# Custom Context
+
+Gleece allows you to extend the route context with custom fields. This is useful when you want to add custom logic and set context from the route definition.
+
+For example, if you're creating a template extension for auditing, you may want to define an audit level in the route definition and use it in the template.
+
+## Define custom context
+
+To define custom context, simply add a `CustomContext` annotation to your route, and set values, attributes, and descriptions as needed.
+
+For example:
+```go
+// @Method(GET)
+// @Route(/custom-context-route)
+// @CustomContext(AUDIT, {level: "critical"}) The audit level description
+func (ec *ExampleController) CustomContextRoute() (string, error) {
+    return "", nil
+}
+```
+
+:::tip
+
+You can specify any number of custom context annotations.
+
+:::
+
+## Context structure
+
+Each `CustomContext` annotation transforms into a `CustomContext` struct as follows:
+```go
+type CustomContext struct {
+    Value       string         // The value (in the example's case it is "AUDIT")
+    Options     map[string]any // The options (in the example's case it is {"level": "critical"})
+    Description string         // The description (in the example's case it is "The audit level description")
+}
+``` 
+
+## Accessing custom context in the template
+
+In the template (extended or overridden), you can access the custom context fields using the `CustomContext` objects.
+
+Each route context has a `CustomContext` collection that contains the custom contexts.
+
+For example, in the `AfterOperationRoutesExtension` template extension, in case of an operation error, print the error with operation ID and audit level, only if audit is defined:
+```handlebars title="after.operation.extension.hbs"
+{{#each CustomContext}}
+    {{#equal Value "AUDIT"}}
+        if (opError != nil) {
+            println("Operation '{{{OperationId}}}' with audit level level {{{Options.level}}} failed , err: ", opError.Error())
+        }
+    {{/equal}}
+{{/each}}
+```

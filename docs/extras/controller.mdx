@@ -18,8 +18,8 @@ However, it is possible to set a custom response code using the `SetStatus` API.
 // @Method(GET)
 // @Route(/my-route)
 func (mc *MyController) MyRoute() (string, error) {
-	mc.SetStatus(runtime.StatusPartialContent)
-	return "", nil
+    mc.SetStatus(runtime.StatusPartialContent)
+    return "", nil
 }
 ```
 
@@ -31,9 +31,9 @@ To set HTTP response headers, use the `SetHeader` API.
 // @Method(GET)
 // @Route(/my-route)
 func (mc *MyController) MyRoute() (string, error) {
-	mc.SetHeader("X-my-Header", "some string")
-	mc.SetHeader("X-my-Header-2", "some string 2")
-	return "", nil
+    mc.SetHeader("X-my-Header", "some string")
+    mc.SetHeader("X-my-Header-2", "some string 2")
+    return "", nil
 }
 ```
 
@@ -45,7 +45,7 @@ This might be necessary to perform extra dynamic operations on the request, supp
 
 Whatever the reason, you can access the router context via the `GetContext` API. The type is `any`, and you can cast it to your router's specific context type.
 
-For example, for `gin`:
+For example:
 ```go
 // @Method(GET)
 // @Route(/my-route)

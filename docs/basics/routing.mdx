@@ -1,0 +1,118 @@
+---
+sidebar_position: 1
+---
+
+# Routing
+
+Gleece is designed to minimize HTTP routing boilerplate code, allowing developers to focus on business logic.
+
+A route is essentially a function within a controller that is annotated with the `@Route` annotation.
+
+## Creating a Controller
+
+First, create a controller struct that extends the GleeceController from Gleece's runtime. Annotate the controller with the base routing path, which will serve as the prefix for all routes in that controller.
+
+You can also set the security schema and scopes for the entire controller (these can be overridden per route later).
+
+```go
+import "github.com/gopher-fleece/runtime"
+
+// @Route(/base-path)
+// @Security(securitySchemaName, { scopes: ["read"] })
+type ExampleController struct {
+    runtime.GleeceController // Embedding the GleeceController to inherit its methods
+}
+```
+
+## Creating a Route
+
+Create a function in the controller to handle the logic and annotate it with the `@Method` and `@Route` annotations:
+
+```go
+// @Method(GET)
+// @Route(/simple-get)
+func (ec *ExampleController) SimpleGet() (string, error) {
+    return "works", nil
+}
+```
+
+To access data from the HTTP request, add parameters to the function along with corresponding annotations indicating their source:
+
+```go
+// @Method(GET)
+// @Route(/simple-get)
+// @Query(name, { validate: "required" })
+// @Response(200)
+func (ec *ExampleController) SimpleGet(name string) (string, error) {
+    return "Hello " + name, nil
+}
+```
+
+Parameters can be sourced from:
+- `@Query`  - Query parameters
+- `@Path`   - URL path parameters
+- `@Header` - HTTP headers
+- `@Body`   - Request body
+
+While you can have multiple `@Query`, `@Path`, and `@Header` annotations, only one `@Body` annotation is allowed per route.
+
+:::info
+
+Parameter Types Support
+- All primitive types (including pointers to them) are supported for any parameter source.
+- Struct types are supported for a `@Body` parameter only.
+
+:::
+
+## Complete Example
+
+Here's a comprehensive example of a controller with annotated routes:
+
+```go title="example.ctrl.go"
+package controllers
+
+import (
+    "github.com/gopher-fleece/runtime"
+)
+
+// @Description Example object
+type Example struct {
+    // @Description Some text
+    Text string `json:"text" validate:"required"`
+    // @Description Some number
+    Number int `json:"number" validate:"gte=1"`
+}
+
+// @Tag(Example)
+// @Route(/base-path)
+// @Security(securitySchemaName, { scopes: ["read"] })
+// @Description The Example API
+type ExampleController struct {
+    runtime.GleeceController
+}
+
+// @Description Create an example
+// @Method(POST)
+// @Route(/logic/{example_name}/{example_id})
+// @Query(email, { validate: "required,email" }) The exampler email
+// @Path(id, { name: "example_id", validate:"gt=1" }) The example ID
+// @Path(name, { name: "example_name" }) The example's name
+// @Body(example) The example object
+// @Header(origin, { name: "x-origin" }) The request origin
+// @Header(trace) The trace ID
+// @Response(200) The new ID of the example
+// @ErrorResponse(500) Error when processing fails
+// @Security(securitySchemaName, { scopes: ["read", "write"] })
+func (ec *ExampleController) ExampleLogic(
+    id int,
+    email string,
+    name string,
+    origin string,
+    trace *string,
+    example Example) (string, error) {
+    newId := uuid.New()
+    return example.Text + " " + newId.String(), nil
+}
+```
+
+For detailed information about all available annotations and their options, please refer to the [Annotations](/docs/extras/annotations) page.

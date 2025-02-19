@@ -1,5 +1,5 @@
 ---
-sidebar_position: 4
+sidebar_position: 5
 ---
 
 # Middlewares
@@ -17,7 +17,7 @@ The middleware returns a boolean value that determines whether to continue execu
 
 ## Implementing Middleware
 
-```go
+```go title="middlewares.go"
 // For Gin
 func MyMiddleware(ctx *gin.Context) bool {
     return true
@@ -40,7 +40,7 @@ func MyMiddleware(w http.ResponseWriter, r *http.Request) bool {
 ```
 
 And similarly for errors middlewares:
-```go
+```go title="middlewares.go"
 // For Gin
 func MyErrorMiddleware(ctx *gin.Context, err error) bool {
     return true
@@ -67,7 +67,7 @@ func MyErrorMiddleware(ctx *fiber.Ctx, err error) bool {
 Use the generated code's `RegisterMiddleware` / `RegisterErrorMiddleware` API to register your middleware functions.
 
 Example:
-```go
+```go title="main.go"
 package main
 
 import (

@@ -1,5 +1,5 @@
 ---
-sidebar_position: 3
+sidebar_position: 4
 ---
 
 # Payload Validation
@@ -74,7 +74,7 @@ Custom validators only affect runtime validation and are not reflected in the Op
 
 To create a custom validator, implement Gleece's `runtime.ValidationFunc` interface and register it using the generated code API's `RegisterCustomValidator` function.
 
-```go
+```go title="main.go"
 package main
 
 import (

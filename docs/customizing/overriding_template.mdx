@@ -1,0 +1,61 @@
+---
+sidebar_position: 2
+---
+
+# Override Template
+
+While extending templates is the recommended approach for most customizations, template overriding gives you complete control over the generated routes by replacing the core templates with your custom implementations.
+
+This approach is particularly useful for scenarios that require deep customization, such as:
+- Implementing custom validation logic
+- Adding specialized authorization flows
+- Completely restructuring route handling
+
+:::warning
+
+**Important Note About Updates**
+
+When overriding Gleece core templates, you won't receive automatic updates when the package is updated.
+
+If you need functionality from newer versions, you'll need to manually merge changes from the updated core templates into your custom implementations.
+
+:::
+
+## Configuration
+
+To override a template, locate the original template in your engine's directory. For example, if you're using the `gin` engine, the templates are available at: 
+[gin templates](https://github.com/gopher-fleece/gleece/tree/main/generator/templates/gin)
+
+Configure your override by adding the template name and the path to your custom implementation in the `routesConfig->templateOverrides` map:
+
+```json title="gleece.config.json"
+"routesConfig": {
+    "engine": "gin",
+    "templateOverrides": {
+        "ResponseHeaders": "./gin.custom.response.headers.hbs"
+    }
+},
+```
+
+:::info
+
+**Template Discovery**
+
+All available templates can be found in your engine's `embeds.go` file:
+- The main entry point template is named `Routes`
+- Additional templates are listed in the `Partials` map
+- For reference, check the gin engine's [embeds.go](https://github.com/gopher-fleece/gleece/blob/main/generator/templates/gin/embeds.go)
+
+:::
+
+:::tip
+
+Using an invalid template name? Don't worry! Gleece will respond with a helpful error message listing all available template names during the build process.
+
+:::
+
+## Generate With Overrides
+
+After configuring your template overrides, rebuild routes using `Gleece`
+
+It will regenerate all routes using your custom templates where specified, while maintaining the default templates for non-overridden templates.

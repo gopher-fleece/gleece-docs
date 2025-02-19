@@ -1,5 +1,5 @@
 ---
-sidebar_position: 1
+sidebar_position: 2
 ---
 
 # Authorization
@@ -15,25 +15,27 @@ Before any use, the security schema needs to be defined.
 Set the security schema in the OpenAPI standard in the `openAPIGeneratorConfig->securitySchemes` in the `gleece.config.json` configuration.
 
 For example
-```json
-...
-"securitySchemes": [
-			{
-				"description": "API Key for accessing the API",
-				"name": "securitySchemaName",
-				"fieldName": "x-header-name",
-				"type": "apiKey",
-				"in": "header"
-			},
-			{
-				"description": "API Key for accessing the API - 2",
-				"name": "securitySchemaName2",
-				"fieldName": "x-header-name-2",
-				"type": "apiKey",
-				"in": "header"
-			}
-		],
-...
+```json title="gleece.config.json"
+{
+    "openAPIGeneratorConfig" : {
+        "securitySchemes": [
+            {
+                "description": "API Key for accessing the API",
+                "name": "securitySchemaName",
+                "fieldName": "x-header-name",
+                "type": "apiKey",
+                "in": "header"
+            },
+            {
+                "description": "API Key for accessing the API - 2",
+                "name": "securitySchemaName2",
+                "fieldName": "x-header-name-2",
+                "type": "apiKey",
+                "in": "header"
+            }
+        ]
+    }
+}
 ```
 
 Properties are OpenAPI v3.x schema.
@@ -56,7 +58,7 @@ Set the default security in the `gleece.config.json` file.
 Set default security method to `openAPIGeneratorConfig->defaultSecurity`.
 
 For example:
-```json
+```json title="gleece.config.json"
 "defaultSecurity": {
             "name": "securitySchemaName",
             "scopes": [
@@ -74,7 +76,7 @@ For example:
 // @Route(/my-route)
 // @Security(securitySchemaName, { scopes: ["read", "write"] })
 type MyController struct {
-	runtime.GleeceController
+    runtime.GleeceController
 }
 ```
 #### Declare security in a route
@@ -86,7 +88,7 @@ Add `Security` annotation to the function/route declaration
 // @Route(/my-route-method)
 // @Security(securitySchemaName, { scopes: ["admin"] })
 func (ec *MyController) MyRouteMethod() (error) {
-	return nil
+    return nil
 }
 ```
 
@@ -99,7 +101,7 @@ For example:
 // @Security(securitySchemaName1, { scopes: ["admin"] })
 // @Security(securitySchemaName2, { scopes: ["admin"] })
 func (ec *MyController) MyRouteMethod() (error) {
-	return nil
+    return nil
 }
 ```
 
@@ -119,8 +121,8 @@ This will ensure at build time that there is no route without any security.
 
 Each Gleece configuration **must** include a reference to the package where the security check is implemented in `routesConfig->authorizationConfig->authFileFullPackageName`.
 
-For example:
-```json
+For example: 
+```json title="gleece.config.json"
 ...
 "authFileFullPackageName": "github.com/gopher-fleece/gleece/auth",
 ...
@@ -131,7 +133,7 @@ Implement your own security check in your package of choice.
 Create a function with this signature, according to your router engine choice:
 
 For `gin`:
-```go
+```go title="auth/security.go"
 import (
     "github.com/gin-gonic/gin"
     "github.com/gopher-fleece/runtime"
@@ -142,7 +144,7 @@ func GleeceRequestAuthorization(ctx *gin.Context, check runtime.SecurityCheck) *
 ```
 
 For `echo`
-```go
+```go title="auth/security.go"
 import (
     "github.com/gopher-fleece/runtime"
     "github.com/labstack/echo/v4"
@@ -154,7 +156,7 @@ func GleeceRequestAuthorization(ctx *gin.Context, check runtime.SecurityCheck) *
 ```
 
 For `Fiber`
-```go
+```go title="auth/security.go"
 import (
     "github.com/gofiber/fiber/v2"
     "github.com/gopher-fleece/runtime"
@@ -166,7 +168,7 @@ func GleeceRequestAuthorization(ctx *fiber.Ctx, check runtime.SecurityCheck) *ru
 ```
 
 For Gorilla's `Mux` and `chi`
-```go
+```go title="auth/security.go"
 import (
     "net/http"
     "github.com/gopher-fleece/runtime"
@@ -188,34 +190,34 @@ In case of more than one security definition on a route, the function will be ca
 By default, the error will be formatted as [rfc7807](https://datatracker.ietf.org/doc/html/rfc7807) and you can override it and provide your own payload that will be responded with.
 
 For example:
-```go
+```go title="auth/security.go"
 func GleeceRequestAuthorization(ctx *gin.Context, check runtime.SecurityCheck) *runtime.SecurityError {
     return &runtime.SecurityError{
-			Message:    "Failed to authorize",
-			StatusCode: runtime.StatusUnauthorized,
-	}
+            Message:    "Failed to authorize",
+            StatusCode: runtime.StatusUnauthorized,
+    }
 }
 ```
 This will be returned with a 401 status code and the payload will be formatted as rfc7807.
 
 And this:
-```go
+```go title="auth/security.go"
 func GleeceRequestAuthorization(ctx *gin.Context, check runtime.SecurityCheck) *runtime.SecurityError {
     return &runtime.SecurityError{
-			Message:    "Failed to authorize",
-			StatusCode: runtime.StatusForbidden,
-           	CustomError: &runtime.CustomError{
-				Payload: struct {
-					Message     string `json:"message"`
-					Description string `json:"description"`
-				}{
-					Message:     "Custom error message",
-					Description: "Custom error description",
-				},
-			},
-	}
-	
-	return nil
+            Message:    "Failed to authorize",
+            StatusCode: runtime.StatusForbidden,
+               CustomError: &runtime.CustomError{
+                Payload: struct {
+                    Message     string `json:"message"`
+                    Description string `json:"description"`
+                }{
+                    Message:     "Custom error message",
+                    Description: "Custom error description",
+                },
+            },
+    }
+    
+    return nil
 }
 ```
 

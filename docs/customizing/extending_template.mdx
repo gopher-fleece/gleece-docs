@@ -1,0 +1,89 @@
+---
+sidebar_position: 1
+---
+
+# Extend Template
+
+Gleece is designed with customization at its core. The most maintainable way to customize templates is through template extension.
+
+Gleece provides a comprehensive set of core templates for each engine to generate code. These templates serve as a foundation that you can extend to match your specific requirements.
+
+Template extension is particularly valuable when you need to incorporate custom functionality such as:
+- Adding telemetry
+- Implementing logging
+- Handling service-specific common logic
+
+:::info
+
+One of the key benefits of using Gleece template extensions is that they remain compatible with core template updates. When the core templates are updated, your extensions will continue to work without requiring manual merges.
+
+:::
+
+
+## Create a new template
+
+To create an extension, start by creating a new `hbs` file that will contain your custom template logic.
+
+Here's a practical example that demonstrates how to add console logging for successful operation results:
+
+```handlebars title="after.operation.extension.hbs"
+if (opError == nil) {
+    resString := ""
+    {{#equal HasReturnValue true}}
+        jsonValue, _ := json.Marshal(value)
+        resString = string(jsonValue)
+    {{/equal}}
+    println("Operation '{{{OperationId}}}' succeeded, response: ", resString)
+}
+```
+
+## Set the extension
+
+Configure your extension in the `gleece.config.json` file by specifying the `AfterOperationRoutesExtension` and its corresponding file path:
+
+```json title="gleece.config.json"
+{
+    "routesConfig": {
+        "templateExtensions": {
+            "AfterOperationRoutesExtension": "./after.operation.extension.hbs"
+        }
+    }
+}
+```
+
+:::info
+
+You can find all available template extensions in the engine-specific `embeds.go` file under `TemplateExtensions` map. For example, check the gin engine's [embeds.go](https://github.com/gopher-fleece/gleece/blob/main/generator/templates/gin/embeds.go).
+
+:::
+
+:::tip
+
+If you specify an invalid extension name, during the build Gleece will respond with an error message listing all available extension names!
+
+:::
+
+## Generate with the extension
+
+Run the `Gleece` build to regenerate routes.
+
+During the build process, your extended template becomes fully integrated with the core template, giving you access to the complete operation context and all available template variables.
+
+:::tip
+
+**Locating Extension In Core Templates**: 
+   1. Look for the extension name in the core templates
+   2. See the exact insertion point and available context variables (like `OperationId`)
+
+**Locating Extension In Generated Code**: 
+   1. Run the Gleece CLI
+   2. Search for placeholder comments in the generated code (e.g., `// after operation routes extension placeholder`). These comments come from the [embeds.go](https://github.com/gopher-fleece/gleece/blob/main/generator/templates/gin/embeds.go) file and mark where your extension code will be inserted
+
+:::
+
+
+:::info
+
+Want to go deeper into template context? Check out [context.go](https://github.com/gopher-fleece/gleece/blob/main/generator/routes/context.go) to discover all available properties.
+
+:::

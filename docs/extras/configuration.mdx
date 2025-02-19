@@ -8,7 +8,7 @@ The Gleece configuration file, usually named `gleece.config.json`, contains all 
 
 Below are all the options with comments explaining each property:
 
-```json
+```json title="gleece.config.json"
 {
     "commonConfig": { // Mandatory
         "controllerGlobs": [ // Mandatory with minimum one path - These paths are the directories/files where Gleece will search for controllers and types/structs. Defining controllers/types outside these paths will result in them being ignored or cause build errors. In this example, it will search in the entire codebase.
@@ -25,7 +25,10 @@ Below are all the options with comments explaining each property:
             "authFileFullPackageName": "<package>", // Mandatory - The package where the authorization function "GleeceRequestAuthorization" is implemented (e.g. github.com/gopher-fleece/gleece/auth)
             "enforceSecurityOnAllRoutes": true // Optional - Enforce during generation time that every route has at least one direct/inherited security annotation
         },
-        "templateOverrides": { // Optional - Override selected engine templates. Key is the template name and value is the path of the custom template
+        "templateExtensions": { // Optional - Extend routes templates. Key is the extension name and value is the path of the template extension
+            "RouteEndRoutesExtension": "./end.route.extension.hbs"
+        },
+        "templateOverrides": { // Optional - *Override* and replace selected engine templates. Key is the template name and value is the path of the custom template
             "ResponseHeaders": "./gin.custom.response.headers.hbs"
         }
     },

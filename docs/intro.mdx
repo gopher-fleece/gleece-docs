@@ -13,7 +13,7 @@ Gleece integrates into an existing server with a router.
 
 :::info
 
-Gleece supports **[Gin](https://github.com/gin-gonic/gin), [Echo v4](https://github.com/labstack/echo), [Gorilla Mux](https://github.com/gorilla/mux), [Chi v5](https://github.com/go-chi/chi), and [Fiber v2](https://github.com/gofiber/fiber)** routers.
+Gleece supports **[Gin](https://github.com/gin-gonic/gin), [Echo v4](https://github.com/labstack/echo), [Gorilla Mux](https://github.com/gorilla/mux), [Chi v5](https://github.com/go-chi/chi),** and **[Fiber v2](https://github.com/gofiber/fiber)** routers.
 
 See [routers](/docs/category/routers) for more info on integrating other routers.
 
@@ -23,7 +23,7 @@ This introduction will be demonstrated with the popular `Gin` router, but all th
 
 A simple server might look like this:
 
-```go
+```go title="main.go"
 package main
 
 import (
@@ -75,7 +75,7 @@ The `github.com/gopher-fleece/gleece` package is only used during build time to 
 ## Gleece Configuration
 
 Create a basic `Gleece` configuration file named `gleece.config.json`:
-```json
+```json title="gleece.config.json"
 {
 	"commonConfig": {
 		"controllerGlobs": [
@@ -124,7 +124,7 @@ Create a basic `Gleece` configuration file named `gleece.config.json`:
 }
 ```
 
-See the full [configuration](/docs/advanced/configuration.mdx) documentation for detailed explanation of all available properties.
+See the full [configuration](/docs/extras/configuration.mdx) documentation for detailed explanation of all available properties.
 
 
 ## Define Authentication
@@ -133,7 +133,7 @@ Create a module and Go file for the authentication function, assuming it is `aut
 
 Inside the file, paste the following code. Modify the logic in `GleeceRequestAuthorization` to fit your needs:
 
-```go
+```go title="auth/security.go"
 package auth
 
 import (
@@ -160,7 +160,7 @@ Create the controller `controllers/user.ctrl.go`.
 
 First, create a struct and embed the `GleeceController` in it. Then add a route method to the struct with the Gleece annotations:
 
-```go
+```go title="controllers/user.ctrl.go"
 package controllers
 
 import (
@@ -215,7 +215,7 @@ In this example configuration, it generates `gin` routes and OpenAPI `v3.0.0` sp
 
 Import the newly created routes into your `main.go` module and register the Gin instance to the generated code:
 
-```go
+```go title="main.go"
 package main
 
 import (

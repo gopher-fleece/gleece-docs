@@ -34,7 +34,7 @@ export default function Home(): ReactNode {
   return (
     <Layout
       title={`Hello from ${siteConfig.title}`}
-      description="Gleece - The Golang tool for building, documenting, validating securing and customizing APIs through code-first development.">
+      description="Gleece - A Golang tool for building, documenting, validating securing and customizing APIs through code-first development.">
       <HomepageHeader />
       <main>
         <HomepageFeatures />

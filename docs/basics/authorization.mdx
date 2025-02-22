@@ -12,12 +12,12 @@ Let's dive into each part of the security mechanism.
 
 Before any use, the security schema needs to be defined.
 
-Set the security schema in the OpenAPI standard in the `openAPIGeneratorConfig->securitySchemes` in the `gleece.config.json` configuration.
+Set the security schema in the OpenAPI standard in the `openapiGeneratorConfig->securitySchemes` in the `gleece.config.json` configuration.
 
 For example
 ```json title="gleece.config.json"
 {
-    "openAPIGeneratorConfig" : {
+    "openapiGeneratorConfig" : {
         "securitySchemes": [
             {
                 "description": "API Key for accessing the API",
@@ -55,7 +55,7 @@ So you can define a default security in the config, override it and set a defaul
 #### Declare security in configuration
 Set the default security in the `gleece.config.json` file.
 
-Set default security method to `openAPIGeneratorConfig->defaultSecurity`.
+Set default security method to `openapiGeneratorConfig->defaultSecurity`.
 
 For example:
 ```json title="gleece.config.json"

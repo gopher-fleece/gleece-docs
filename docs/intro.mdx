@@ -92,7 +92,7 @@ Create a basic `Gleece` configuration file named `gleece.config.json`:
 			"enforceSecurityOnAllRoutes": true
 		}
 	},
-	"openAPIGeneratorConfig": {
+	"openapiGeneratorConfig": {
 		"openapi" : "3.0.0",
 		"info": {
 			"title": "Sample API",
@@ -207,7 +207,7 @@ gleece
 
 By default, it reads the `gleece.config.json` configuration file.
 It generates routes based on the engine specified in `routesConfig->engine`.
-It also generates the OpenAPI specification according to the version set in `openAPIGeneratorConfig->openapi`.
+It also generates the OpenAPI specification according to the version set in `openapiGeneratorConfig->openapi`.
 
 In this example configuration, it generates `gin` routes and OpenAPI `v3.0.0` specifications, with both outputs in the `dist` directory.
 

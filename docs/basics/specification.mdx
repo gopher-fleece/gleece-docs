@@ -20,19 +20,19 @@ Gleece fully supports both OpenAPI versions:
 
 In the `gleece.config.json`, define the following:
 
-- `openAPIGeneratorConfig->openapi`: The OpenAPI version (`3.0.0` or `3.1.0`)
-- `openAPIGeneratorConfig->specGeneratorConfig->outputPath`: The generated specification file path
-- `openAPIGeneratorConfig->info`: The metadata to be added to the generated specification
-- `openAPIGeneratorConfig->baseUrl`: The base URL of the API
-- `openAPIGeneratorConfig->securitySchemes`: The security schema collection to be used in the API, which will be exposed in the OpenAPI specification and whose `name` will be used in the routes' `@Security` annotation
-- `openAPIGeneratorConfig->defaultSecurity`: The default security setting for routes without a security annotation on the route or controller, used as a fallback
+- `openapiGeneratorConfig->openapi`: The OpenAPI version (`3.0.0` or `3.1.0`)
+- `openapiGeneratorConfig->specGeneratorConfig->outputPath`: The generated specification file path
+- `openapiGeneratorConfig->info`: The metadata to be added to the generated specification
+- `openapiGeneratorConfig->baseUrl`: The base URL of the API
+- `openapiGeneratorConfig->securitySchemes`: The security schema collection to be used in the API, which will be exposed in the OpenAPI specification and whose `name` will be used in the routes' `@Security` annotation
+- `openapiGeneratorConfig->defaultSecurity`: The default security setting for routes without a security annotation on the route or controller, used as a fallback
 
 See a full example below:
 
 
 
 ```json
-"openAPIGeneratorConfig": {
+"openapiGeneratorConfig": {
     "openapi": "3.0.0", // Mandatory - The OpenAPI specification version to generate. Available options: "3.0.0", "3.1.0"
     "info": { // Mandatory - Metadata that will be added to the generated specification
         "title": "Sample API", // Mandatory
@@ -339,7 +339,7 @@ This is how the results should look:
 
 ### OpenAPI 3.1.0
 
-Changing the `openAPIGeneratorConfig->openapi` to `3.1.0` will result in:
+Changing the `openapiGeneratorConfig->openapi` to `3.1.0` will result in:
 
 <CollapsibleCode maxLines={10} buttonShowMoreText="Show full content">
 

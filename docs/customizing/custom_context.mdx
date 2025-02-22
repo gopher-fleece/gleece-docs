@@ -1,0 +1,66 @@
+---
+sidebar_position: 3
+---
+
+# Custom Context
+
+Gleece allows you to add your own context to the templating process with custom fields. This is useful when you want to add custom logic and use some context from the route definition.
+
+For example, if you're creating a template extension for auditing, you may want to define an audit level in the route definition and use it in the template.
+
+## Define custom context
+
+To define custom context, simply add a `TemplateContext` annotation to your route, and set values, attributes, and descriptions as needed.
+
+For example:
+```go
+// @Method(GET)
+// @Route(/custom-context-route)
+// @TemplateContext(AUDIT, {level: "critical"}) The audit level description
+func (ec *ExampleController) TemplateContextRoute() (string, error) {
+    return "", nil
+}
+```
+
+:::tip
+
+You can specify any number of `TemplateContext` annotations, but only one value (e.g. `AUDIT`) is allowed per annotation.
+
+:::
+
+## Context structure
+
+All of the `TemplateContext` annotations are transformed into a map of `TemplateContext` struct as follows:
+
+```go
+type TemplateContext struct {
+    Options     map[string]any // The options (in the example's case it is {"level": "critical"})
+    Description string         // The description (in the example's case it is "The audit level description")
+}
+``` 
+
+And the value (e.g. `AUDIT`) of the `TemplateContext` annotation is the key of the map.
+
+```go
+map[string]TemplateContext{
+    "AUDIT": {
+        Options: map[string]any{"level": "critical"},
+        Description: "The audit level description",
+    },
+}
+```
+
+## Accessing custom context in the template
+
+In the template (extended or overridden), you can access the custom context fields using the `TemplateContext` object.
+
+Each route context has a `TemplateContext` map that contains the custom contexts.
+
+For example, in the `AfterOperationRoutesExtension` template extension, in case of an operation error, print the error with operation ID and audit level, only if audit is defined:
+```handlebars title="after.operation.extension.hbs"
+{{#if TemplateContext.AUDIT}}
+    if (opError != nil) {
+        println("Operation '{{{{OperationId}}}}' with audit level {{{{TemplateContext.AUDIT.Options.level}}}} failed, err: ", opError.Error())
+    }
+{{/if}}
+```

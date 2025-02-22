@@ -4,6 +4,8 @@ sidebar_position: 2
 
 # Specification
 
+import { CollapsibleCode } from '@site/src/components/CollapsibleCode/CollapsibleCode';
+
 One of Gleece's powerful features is its automatic OpenAPI specification generation directly from your codebase.
 
 This ensures that the specification will always be up-to-date with the code and can be integrated into the CI/CD pipeline to maintain consistently documented APIs.
@@ -26,6 +28,8 @@ In the `gleece.config.json`, define the following:
 - `openAPIGeneratorConfig->defaultSecurity`: The default security setting for routes without a security annotation on the route or controller, used as a fallback
 
 See a full example below:
+
+
 
 ```json
 "openAPIGeneratorConfig": {
@@ -127,8 +131,26 @@ Run the `Gleece` command to generate the specification.
 
 This is how the results should look:
 
+<CollapsibleCode maxLines={10} buttonShowMoreText="Show full content">
+
 ```json title="openapi3.0.json"
 {
+  "openapi": "3.0.0",
+  "info": {
+    "contact": {
+      "email": "support@example.com",
+      "name": "API Support",
+      "url": "http://www.example.com/support"
+    },
+    "description": "This is a sample API",
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "termsOfService": "http://example.com/terms/",
+    "title": "Sample API",
+    "version": "1.0.0"
+  },
   "components": {
     "schemas": {
       "Example": {
@@ -200,22 +222,6 @@ This is how the results should look:
       }
     }
   },
-  "info": {
-    "contact": {
-      "email": "support@example.com",
-      "name": "API Support",
-      "url": "http://www.example.com/support"
-    },
-    "description": "This is a sample API",
-    "license": {
-      "name": "Apache 2.0",
-      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
-    },
-    "termsOfService": "http://example.com/terms/",
-    "title": "Sample API",
-    "version": "1.0.0"
-  },
-  "openapi": "3.0.0",
   "paths": {
     "/base-path/logic/{example_name}/{example_id}": {
       "post": {
@@ -329,9 +335,13 @@ This is how the results should look:
 }
 ```
 
+</CollapsibleCode>
+
 ### OpenAPI 3.1.0
 
 Changing the `openAPIGeneratorConfig->openapi` to `3.1.0` will result in:
+
+<CollapsibleCode maxLines={10} buttonShowMoreText="Show full content">
 
 ```json title="openapi3.1.json"
 {
@@ -531,3 +541,5 @@ Changing the `openAPIGeneratorConfig->openapi` to `3.1.0` will result in:
     }
 }
 ```
+
+</CollapsibleCode>

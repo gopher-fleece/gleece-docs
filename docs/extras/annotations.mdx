@@ -50,20 +50,21 @@ These annotations are used at the controller class level.
 | `@Deprecated` | Marks the entire controller as deprecated        | -                  | -                                          | No       |         |
 
 ## Function-Level Annotations - Route
-| Annotation      | Purpose                                                    | Parameter          | JSON5 Options Ref                     | Required | Comment |
-|-----------------|------------------------------------------------------------|--------------------|---------------------------------------|----------|---------|
-| `@Method`       | Defines the HTTP method for the route                      | httpVerb           | -                                     | Yes      |         | 
-| `@Route`        | Defines the route path for the method                      | path               | -                                     | Yes      | Route var supports [OpenAPI v3 Specification - Path Templating](https://swagger.io/specification/v3/) (e.g. `/users/{userId}`)   |
-| `@Query`        | Defines a query parameter for the endpoint                 | paramName          | [Query Options](#query-options)       | No       | Support description |
-| `@Header`       | Defines an header parameter for the endpoint               | paramName          | [Header Options](#header-options)     | No       | Support description |
-| `@Path`         | Defines a path parameter for the endpoint                  | paramName          | [Path Options](#path-options)         | No       | Support description |
-| `@Body`         | Defines a body parameter for the endpoint                  | paramName          | [Body Options](#body-options)         | No       | Support description |
-| `@Security`     | Defines a security for the route                           | securitySchemeName | [Security Options](#security-options) | No       | Supports multiple annotation and will be count as logical OR between them |
-| `@Response`     | Specifies the success response code                        | statusCode         | -                                     | No       | Description can include HTML formatting |
-| `@ErrorResponse`| Defines possible error response                            | statusCode         | -                                     | No       | Description can include HTML formatting |
-| `@Description`  | Provides a detailed description of the endpoint            | -                  | -                                     | No       |         | 
-| `@Deprecated`   | Marks the endpoint as deprecated                           | -                  | -                                     | No       |         |
-| `@Hidden`       | Hides the endpoint from API documentation                  | -                  | -                                     | No       |         |
+| Annotation         | Purpose                                                    | Parameter          | JSON5 Options Ref                     | Required | Comment |
+|--------------------|------------------------------------------------------------|--------------------|---------------------------------------|----------|---------|
+| `@Method`          | Defines the HTTP method for the route                      | httpVerb           | -                                     | Yes      |         | 
+| `@Route`           | Defines the route path for the method                      | path               | -                                     | Yes      | Route var supports [OpenAPI v3 Specification - Path Templating](https://swagger.io/specification/v3/) (e.g. `/users/{userId}`)   |
+| `@Query`           | Defines a query parameter for the endpoint                 | paramName          | [Query Options](#query-options)       | No       | Support description |
+| `@Header`          | Defines an header parameter for the endpoint               | paramName          | [Header Options](#header-options)     | No       | Support description |
+| `@Path`            | Defines a path parameter for the endpoint                  | paramName          | [Path Options](#path-options)         | No       | Support description |
+| `@Body`            | Defines a body parameter for the endpoint                  | paramName          | [Body Options](#body-options)         | No       | Support description |
+| `@Security`        | Defines a security for the route                           | securitySchemeName | [Security Options](#security-options) | No       | Supports multiple annotation and will be count as logical OR between them |
+| `@Response`        | Specifies the success response code                        | statusCode         | -                                     | No       | Description can include HTML formatting |
+| `@ErrorResponse`   | Defines possible error response                            | statusCode         | -                                     | No       | Description can include HTML formatting |
+| `@Description`     | Provides a detailed description of the endpoint            | -                  | -                                     | No       |         | 
+| `@Deprecated`      | Marks the endpoint as deprecated                           | -                  | -                                     | No       |         |
+| `@Hidden`          | Hides the endpoint from API documentation                  | -                  | -                                     | No       |         |
+| `@TemplateContext` | Defines custom context data for templates                  | contextKey         | Any JSON5 object                      | No       | Supports multiple annotations with unique contextKey values. See [Custom Context](/docs/customizing/custom_context) for more details  |
 
 # Schema Annotations
 

@@ -4,15 +4,30 @@ sidebar_position: 3
 
 # Custom Context
 
-Gleece allows you to add your own context to the templating process with custom fields. This is useful when you want to add custom logic and use some context from the route definition.
+## Overview
 
-For example, when creating a template extension for auditing, you may want to define an audit level in the route definition and use it in the template.
+Gleece enhances your templating process by allowing you to add custom context fields. This feature is particularly useful when you need to:
+- Add custom logic to your templates
+- Include specific context from route definitions
+- Implement conditional template behavior
 
-## Define custom context
+## Use Cases
 
-To define custom context, simply add a `TemplateContext` annotation to a route, and set value, attributes, and descriptions as needed.
+A common use case is template extension for auditing. For instance, you might want to:
+1. Define an audit level in your route definition
+2. Access this audit level in your templates
+3. Apply different template logic based on the audit level
 
-For example:
+## Adding Custom Context
+
+### Basic Usage
+
+To add custom context, follow these steps:
+1. Add a `TemplateContext` annotation to your route
+2. Set the desired value, attributes, and descriptions
+
+Here's a simple example:
+
 ```go
 // @Method(GET)
 // @Route(/custom-context-route)
@@ -22,16 +37,18 @@ func (ec *ExampleController) TemplateContextRoute() (string, error) {
 }
 ```
 
-:::tip
-
-You can specify any number of `TemplateContext` annotations, but only one value (e.g. `AUDIT`) is allowed per route.
-
+:::tip Important Note
+While you can add multiple `TemplateContext` annotations to a route, each annotation must have a unique value (e.g., `AUDIT`).
 :::
 
-## Context structure
+### Understanding the Structure
 
-All of the `TemplateContext` annotations are transformed into a map of `TemplateContext` struct while 
-the values (e.g. `AUDIT`) are transformed into the keys in the map.
+Custom context is organized into a map structure where:
+- Each `TemplateContext` annotation becomes an entry in the map
+- The annotation value (e.g., `AUDIT`) serves as the key
+- The context details are stored in a structured format
+
+Here's how the data is structured:
 
 ```go
 map[string]TemplateContext{
@@ -42,13 +59,18 @@ map[string]TemplateContext{
 }
 ```
 
-## Accessing custom context in the template
+## Using Custom Context in Templates
 
-In the template (extended or overridden), access the custom context fields using the `TemplateContext` object.
+### Accessing Context Data
 
-Each route context has a `TemplateContext` map that contains the custom contexts.
+When working with templates (either extended or overridden):
+- Use the `TemplateContext` object to access custom fields
+- Each route context includes a `TemplateContext` map containing all custom contexts
 
-For example, in the `AfterOperationRoutesExtension` template extension, in case of an operation error, print the error with operation ID and audit level, only if audit is defined:
+### Practical Example
+
+Here's how to use custom context in an `AfterOperationRoutesExtension` template to handle operation errors:
+
 ```handlebars title="after.operation.extension.hbs"
 {{#if TemplateContext.AUDIT}}
     if (opError != nil) {
@@ -56,3 +78,10 @@ For example, in the `AfterOperationRoutesExtension` template extension, in case 
     }
 {{/if}}
 ```
+
+This example:
+1. Checks if audit context exists
+2. If present and an error occurs, prints:
+   - The operation ID
+   - The audit level
+   - The error message

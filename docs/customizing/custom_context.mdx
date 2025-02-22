@@ -6,11 +6,11 @@ sidebar_position: 3
 
 Gleece allows you to add your own context to the templating process with custom fields. This is useful when you want to add custom logic and use some context from the route definition.
 
-For example, if you're creating a template extension for auditing, you may want to define an audit level in the route definition and use it in the template.
+For example, when creating a template extension for auditing, you may want to define an audit level in the route definition and use it in the template.
 
 ## Define custom context
 
-To define custom context, simply add a `TemplateContext` annotation to your route, and set values, attributes, and descriptions as needed.
+To define custom context, simply add a `TemplateContext` annotation to a route, and set value, attributes, and descriptions as needed.
 
 For example:
 ```go
@@ -24,22 +24,14 @@ func (ec *ExampleController) TemplateContextRoute() (string, error) {
 
 :::tip
 
-You can specify any number of `TemplateContext` annotations, but only one value (e.g. `AUDIT`) is allowed per annotation.
+You can specify any number of `TemplateContext` annotations, but only one value (e.g. `AUDIT`) is allowed per route.
 
 :::
 
 ## Context structure
 
-All of the `TemplateContext` annotations are transformed into a map of `TemplateContext` struct as follows:
-
-```go
-type TemplateContext struct {
-    Options     map[string]any // The options (in the example's case it is {"level": "critical"})
-    Description string         // The description (in the example's case it is "The audit level description")
-}
-``` 
-
-And the value (e.g. `AUDIT`) of the `TemplateContext` annotation is the key of the map.
+All of the `TemplateContext` annotations are transformed into a map of `TemplateContext` struct while 
+the values (e.g. `AUDIT`) are transformed into the keys in the map.
 
 ```go
 map[string]TemplateContext{
@@ -52,7 +44,7 @@ map[string]TemplateContext{
 
 ## Accessing custom context in the template
 
-In the template (extended or overridden), you can access the custom context fields using the `TemplateContext` object.
+In the template (extended or overridden), access the custom context fields using the `TemplateContext` object.
 
 Each route context has a `TemplateContext` map that contains the custom contexts.
 

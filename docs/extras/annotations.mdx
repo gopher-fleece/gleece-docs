@@ -19,6 +19,7 @@ This document provides a comprehensive guide to all annotations and options supp
   - [Path Options](#path-options)
   - [Header Options](#header-options)
   - [Body Options](#body-options)
+  - [Form Field Options](#form-field-options)
   - [Security Options](#security-options)
 
 # Overview
@@ -42,7 +43,7 @@ This document provides a comprehensive guide to all annotations and options supp
 These annotations are used at the controller class level.
 
 | Annotation    | Purpose                                          | Parameter          | JSON5 Options Ref                          | Required | comment |
-|---------------|--------------------------------------------------|--------------------|--------------------------------------------|----------|---------|
+|---------------|--------------------------------------------------|--------------------|--------------------------------------------|----------|---------| 
 | `@Tag`        | Defines the OpenAPI tag for grouping routes      | tagName            | -                                          | No       |         |
 | `@Route`      | Defines the base route path for all methods      | path               | -                                          | Yes      |         |
 | `@Security`   | Set the default security for controller's routes | securitySchemeName | [Security Options](#security-options)      | No       | Supports multiple annotation and will be count as logical OR between them |
@@ -51,13 +52,14 @@ These annotations are used at the controller class level.
 
 ## Function-Level Annotations - Route
 | Annotation         | Purpose                                                    | Parameter          | JSON5 Options Ref                     | Required | Comment |
-|--------------------|------------------------------------------------------------|--------------------|---------------------------------------|----------|---------|
+|--------------------|------------------------------------------------------------|--------------------|---------------------------------------|----------|---------| 
 | `@Method`          | Defines the HTTP method for the route                      | httpVerb           | -                                     | Yes      |         | 
 | `@Route`           | Defines the route path for the method                      | path               | -                                     | Yes      | Route var supports [OpenAPI v3 Specification - Path Templating](https://swagger.io/specification/v3/) (e.g. `/users/{userId}`)   |
 | `@Query`           | Defines a query parameter for the endpoint                 | paramName          | [Query Options](#query-options)       | No       | Support description |
 | `@Header`          | Defines an header parameter for the endpoint               | paramName          | [Header Options](#header-options)     | No       | Support description |
 | `@Path`            | Defines a path parameter for the endpoint                  | paramName          | [Path Options](#path-options)         | No       | Support description |
-| `@Body`            | Defines a body parameter for the endpoint                  | paramName          | [Body Options](#body-options)         | No       | Support description |
+| `@Body`            | Defines a body parameter for the endpoint                  | paramName          | [Body Options](#body-options)         | No       | Support description, only one body parameter is allowed per route. Cannot be used with `@Form` |
+| `@FormField`       | Defines URL-encoded form parameter for the endpoint        | paramName          | [Form Options](#form-field-options)   | No       | Support description. Used as `x-www-form-urlencoded` request body. Cannot be used with `@Body` |
 | `@Security`        | Defines a security for the route                           | securitySchemeName | [Security Options](#security-options) | No       | Supports multiple annotation and will be count as logical OR between them |
 | `@Response`        | Specifies the success response code                        | statusCode         | -                                     | No       | Description can include HTML formatting |
 | `@ErrorResponse`   | Defines possible error response                            | statusCode         | -                                     | No       | Description can include HTML formatting |
@@ -70,13 +72,13 @@ These annotations are used at the controller class level.
 
 ## Struct Annotations - Schema
 | Annotation      | Purpose                                                    | Parameter     | JSON5 Options Ref                 | Required | Comment |
-|-----------------|------------------------------------------------------------|--------------|------------------------------------|----------|---------|
+|-----------------|------------------------------------------------------------|--------------|------------------------------------|----------|---------| 
 | `@Description`  | Provides a detailed description of the schema              | -            | -                                  | No       |         | 
 | `@Deprecated`   | Marks the schema as deprecated                             | -            | -                                  | No       |         |
 
 ## Field Annotations - Property
 | Annotation      | Purpose                                                    | Parameter     | JSON5 Options Ref                 | Required | Comment |
-|-----------------|------------------------------------------------------------|--------------|------------------------------------|----------|---------|
+|-----------------|------------------------------------------------------------|--------------|------------------------------------|----------|---------| 
 | `@Description`  | Provides a detailed description of the property            | -            | -                                  | No       |         | 
 | `@Deprecated`   | Marks the property as deprecated                           | -            | -                                  | No       |         |
 
@@ -109,6 +111,13 @@ These annotations are used at the controller class level.
 
 | Field Name    | Description                                    | Default                   |
 |---------------|------------------------------------------------|---------------------------|
+| `validate`    | Standard go-playground validation string       | -                         |
+
+### Form Field Options
+
+| Field Name    | Description                                    | Default                   |
+|---------------|------------------------------------------------|---------------------------|
+| `name`        | The name of the form field in the request      | Function parameter name   |
 | `validate`    | Standard go-playground validation string       | -                         |
 
 ### Security Options

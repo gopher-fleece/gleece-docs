@@ -2,11 +2,26 @@
 title: Building a Services API Ecosystem
 ---
 
+### This article is written by [Haim Kastner](https://github.com/haimkastner) & [Yuval Pomerchik](https://github.com/yuval-po),
+### Team & Technology leaders at Check Point Software Technologies and creators/maintainers of [Gleece](https://github.com/gopher-fleece/gleece).
+### All opinions expressed are their own.
+
 # The Ecosystem of the API
 
 Building an API is not just about adding endpoints that receive calls and execute logic. That's only the beginning. In a real-world server environment, there's much more to consider.
 
 When building an API, you need to account for multiple aspects in your design: API consumers (both internal and external services), frontend applications, authentication mechanisms to verify request origins, permission checking with RBAC implementation, and input validation - and these are just the basics. Additional considerations include auditing, error handling, and many other critical components.
+
+# The Ecosystem of an API — Alt Ver
+RESTful APIs are deceptively simple creatures — just an exchange of agreed-upon messages between client and server.
+
+In reality, they're often a sore point for many applications, presenting interesting challenges both architectural and practical.
+
+Designing an API means accounting for a myriad of scenarios and topics like multiple consumers across different domains, authentication and authorization with role-based access control, input validation, error handling, rate-limiting and much more.
+
+As our offerings grow and mature, so too must our processes.
+
+Below, we explore our perspective on APIs as holistic ecosystems — how they should be developed, deployed, maintained, and consumed.
 
 ## The Two Main Sections
 
@@ -37,6 +52,7 @@ There are several significant issues, among them:
 - *Documentation Drift* - Similar to the previous point, maintaining documentation for a live product often results in outdated information. Keeping documentation synchronized with each tiny new feature addition becomes increasingly challenging.
 
 - *Repeated Boilerplate* - APIs typically require common behaviors that must be duplicated for each API consumer and call when using a "naked" HTTP client.
+
 
 ### API Handling Ecosystem
 

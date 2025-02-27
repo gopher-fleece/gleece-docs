@@ -48,20 +48,32 @@ func (ec *ExampleController) SimpleGet(name string) (string, error) {
 }
 ```
 
-Parameters can be sourced from:
-- `@Query`  - Query parameters
-- `@Path`   - URL path parameters
-- `@Header` - HTTP headers
-- `@Body`   - Request body
+#### Parameters can be sourced from:
 
-While you can have multiple `@Query`, `@Path`, and `@Header` annotations, only one `@Body` annotation is allowed per route.
+- `@Query`     - Query parameters in the URL
+- `@Path`      - URL path parameters
+- `@Header`    - HTTP headers
+- `@Body`      - Request body
+- `@FromField` - Request urlencoded from fields
+
+Multiple instances of `@Query`, `@Path`, `@FromField`, and `@Header` annotations is allowed in a single route. 
+
+However, only one `@Body` annotation is allowed per route.
 
 :::info
+### Parameter Types
 
-Parameter Types Support
-- All primitive types (including pointers to them) are supported for any parameter source.
-- Struct types are supported for a `@Body` parameter only.
+- **Primitive Types**: All primitive types (and their pointer variants) are supported across all parameter sources, (exceps for `@Body`).
+- **Struct Types**: Only supported when used with the `@Body` parameter
+:::
 
+:::warning
+#### Body Processing Constraints
+
+The `@Body` and `@FromField` annotations should not be used together in the same route as they represent different approaches to processing the request body payload:
+
+- `@FromField` - Processes individual fields from `application/x-www-form-urlencoded` request payload
+- `@Body` - Processes complete `application/json` request payload
 :::
 
 ## Complete Example

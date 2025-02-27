@@ -6,13 +6,8 @@ title: Building a Services API Ecosystem
 ### Team & Technology leaders at Check Point Software Technologies and creators/maintainers of [Gleece](https://github.com/gopher-fleece/gleece).
 ### All opinions expressed are their own.
 
-# The Ecosystem of the API
+# The Ecosystem of an API
 
-Building an API is not just about adding endpoints that receive calls and execute logic. That's only the beginning. In a real-world server environment, there's much more to consider.
-
-When building an API, you need to account for multiple aspects in your design: API consumers (both internal and external services), frontend applications, authentication mechanisms to verify request origins, permission checking with RBAC implementation, and input validation - and these are just the basics. Additional considerations include auditing, error handling, and many other critical components.
-
-# The Ecosystem of an API — Alt Ver
 RESTful APIs are deceptively simple creatures — just an exchange of agreed-upon messages between client and server.
 
 In reality, they're often a sore point for many applications, presenting interesting challenges both architectural and practical.
@@ -23,29 +18,17 @@ As our offerings grow and mature, so too must our processes.
 
 Below, we explore our perspective on APIs as holistic ecosystems — how they should be developed, deployed, maintained, and consumed.
 
-## The Two Main Sections
-
-Generally, this ecosystem divides into two main sections:
-1. The API consuming ecosystem
-2. The API handling ecosystem
-
-The *API consuming ecosystem* encompasses all external entities: other services, frontend applications, public APIs, documentation consumers, etc., that interact with the API.
-
-The *API handling ecosystem* includes all the API's internal logic that must be managed, from authorization and validation to common business logic implementation.
-
-While numerous excellent tools exist for addressing each of these challenges, we'll share our design approach to tackle these challenges - from the theoretical desired solution to a practical REST API demonstration using our [Gleece](https://github.com/gopher-fleece/gleece) tool for the Go community.
-
-> Needless to say, these design principles are abstract and can be implemented using any technology stack and tools available.
-
 ## Challenges with Basic API Implementation
 
-### API Consuming Ecosystem
+Generally, this ecosystem divides into two main sections:
+
+### API Consumers
 
 Let's examine the API consuming ecosystem. What are the drawbacks of simply exposing a REST API and allowing the frontend or other services to use fetch (or curl, or any HTTP client tool) to interact with the API endpoints?
 
 There are several significant issues, among them:
 
-- *Type Duplication* - While the API service creates interfaces/types/classes to model data, each consuming service must declare these again. When the model changes, you need to update all these "mirrors" across all services. This becomes a maintenance nightmare when your API is substantial and consumed across multiple teams and technologies.
+- *Models Duplication* - While in the API source creating interfaces/types/classes to model data, each consuming service must declare these again. When the model changes, you need to update all these "mirrors" across all services. This becomes a maintenance nightmare when your API is substantial and consumed across multiple teams and technologies.
 
 - *Runtime API Mismatches* - Mistakes are inevitable. When someone modifies an API and accidentally overlooks updating one of the consumers, everything might appear fine during the build process - until it surfaces as a runtime bug.
 
@@ -54,38 +37,54 @@ There are several significant issues, among them:
 - *Repeated Boilerplate* - APIs typically require common behaviors that must be duplicated for each API consumer and call when using a "naked" HTTP client.
 
 
-### API Handling Ecosystem
+### API Source
 
-Similarly, for the API handling ecosystem, simply adding new routes to handle requests and implement logic isn't sufficient for a production-grade product. You need:
+Similarly, for the API source ecosystem, simply adding new routes to handle requests and implement logic isn't sufficient for a production-grade product.
 
-- *Default Validation* - Input validation should be automated and standardized
-- *RBAC Declaration* - Each route should specify required permissions, with a common handler enforcing them
-- *Documentation* - Documentation should be tightly coupled with code, automatically updating when code changes
-- *Common Behaviors* - Production requirements like auditing and reporting should be handled uniformly, not implemented repeatedly
-- *Simplicity and Unification* - Last but not least, you need a tool/library/framework that makes developers' implementation easy and straightforward.
+A real product route will require multiple common behaviors such as:
 
-## Designing the Solution
+- *Input Validation* 
+- *Role Based Access Control (RBAC)* 
+- *Documentation* 
+- *Logs*
+- *Telemetry* 
+
+And handling each topic individually in a route is a nightmare and error prone.
+
+## Requirements For The Solution
+
+The solution should includes 
+
+- Documentation is always up-to-date
+- Consumers always synchronized with the source's specification
+- Adding API endpoints not require to "remember" critical actions (such as as calling validator...) 
+- API changes are safe by design
+- Minimal boilerplate when adding a new API endpoint
+- Common standard to common behavior (errors are common -> common behavior for errors)
+- Easy way to control and customize the endpoints common behaviors
+
+In general, no surprizes, everything should be predictable.
+
+## Designing The Solution  
 
 The key principle is simple: Write once, and let the infrastructure processes handle everything else.
 
-To address the API handling ecosystem, the API declaration should utilize a library or framework that provides:
+From the source code generate a specification that includes the APIs and models, and distribute it during the build process to all consumers.
 
-- *Specification Generation* - From the codebase without requiring extra effort from the developer. If it works, it is documented.
-- *RBAC Permission Specification* - As simple as possible, with an enforcement mechanism so it cannot be bypassed.
-- *Validation* - Except for edge cases, it should require nothing from the developer and be based solely on the models (class/interface) in the code.
-- *Common Error Handling* - As simple as it sounds.
-- *Expandability* - To any needed common logic (auditing, telemetry, logging, etc.)
+Consumers receive the updated specification and use it to generate code with ready-to-use APIs and models, including common logic like authentication and telemetry. 
 
-The solution design for the API consuming ecosystem should follow this principle: write once in the API service, generate a specification that includes the APIs and models, and distribute it during the build process to all consumers.
+This approach allows developers to focus on their business logic while the framework ensures documentation remains synchronized, payloads are validated, security checks are performed, and other common logic is handled. The CI/CD infrastructure distributes the changes across the entire system, including external consumers.
 
-Consumers receive the updated specification and use it to generate code with ready-to-use APIs and models, including common logic like authentication and telemetry. This approach allows developers to focus on their business logic while the framework ensures documentation remains synchronized, payloads are validated, security checks are performed, and other common logic is handled. The CI/CD infrastructure distributes the changes across the entire system, including external consumers.
+While numerous excellent tools exist for addressing each of these challenges, we'll share our design approach to tackle these challenges - from the theoretical desired solution to a practical REST API demonstration using our [Gleece](https://github.com/gopher-fleece/gleece) tool for the Go community.
 
-### Shaping the Solution
+> Needless to say, these design principles are abstract and can be implemented using any technology stack and tools available.
+
+### Shaping The Solution
 
 When shaping a solution for API tooling (and probably not only for API), it's important to distinguish between the two "users" of a tool/framework:
 
 - *Developers* - Those who need to implement the logic. For them, we want to provide the simplest experience possible.
-- *Architects* - Those responsible for shaping the service. For them, we want to give the maximum ability to extend and customize the tool's behavior to meet their needs.
+- *Maintainers* - Those responsible for shaping the service. For them, we want to give the maximum ability to extend and customize the tool's behavior to meet their needs.
 
 In many cases, it can be the same person, but it's still a different role, and it's important to address both properly.
 
@@ -94,6 +93,12 @@ As real-world products tend to require unpredictable and endless possible featur
 This approach maximizes developers' day-to-day usage while the generated routes act at runtime like any other human-written routes, readable, easy to debug, and bypass when needed.
 
 Similarly, this approach gives architects all the needed abilities to modify the final routes to the exact needs, due to the fact that the route templates can be extended and even fully overridden.
+
+- *Specification Generation* - From the codebase without requiring extra effort from the developer. If it works, it is documented.
+- *RBAC Permission Specification* - As simple as possible, with an enforcement mechanism so it cannot be bypassed.
+- *Validation* - Except for edge cases, it should require nothing from the developer and be based solely on the models (class/interface) in the code.
+- *Common Error Handling* - As simple as it sounds.
+- *Expandability* - To any needed common logic (auditing, telemetry, logging, etc.)
 
 ### Developer's Experience
 
@@ -136,7 +141,7 @@ As demonstrated, the developer can simply create a function, annotate it as need
 
 Gleece will prepare everything else needed during the build, pre-configuring the validation, the security check, error handling, the extended common behavior, etc. And, not less important, nothing extra is required for the OpenAPI specification generation.
 
-### Architect's Experience
+### Maintainer's Experience
 
 The simplest and most straightforward method is to register middlewares to handle errors and some logic to run in a request handling lifecycle.:
 

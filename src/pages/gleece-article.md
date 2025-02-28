@@ -58,17 +58,17 @@ Implementing these behaviors for every endpoint is an error-prone nightmare.
 
 ## Requirements For The Solution
 
-The solution should includes 
+The solution should ensure that:
 
-- Documentation is always up-to-date
-- Consumers always synchronized with the source's specification
-- Adding API endpoints not require to "remember" critical actions (such as as calling validator...) 
-- API changes are safe by design
-- Minimal boilerplate when adding a new API endpoint
-- Common standard to common behavior (errors are common -> common behavior for errors)
-- Easy way to control and customize the endpoints common behaviors
+- Documentation is always up-to-date.
+- Consumers are always synchronized with the provider's specification.
+- API changes do not require in-depth knowledge or force developers to "remember" to add essential behaviors (e.g., validation, authorization).
+- API changes are safe by design.
+- Implementations require minimal boilerplate.
+- Common behaviors follow a unified standard (e.g., consistent error formats).
+- Maintainers have straightforward ways to control and customize common behaviors at both system and endpoint levels.
 
-In general, no surprizes, everything should be predictable.
+Overall, the solution should yield a predictable and stable ecosystem- a zero-surprise product.
 
 ## Shaping The Solution  
 

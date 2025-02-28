@@ -131,7 +131,8 @@ func (ec *ExampleController) ExampleLogic(
     name string,
     origin string,
     trace *string,
-    example Example) (string, error) {
+    example Example
+) (string, error) {
     newId := uuid.New()
     return example.Text + " " + newId.String(), nil
 }

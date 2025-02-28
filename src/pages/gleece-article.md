@@ -72,18 +72,21 @@ Overall, the solution should yield a predictable and stable ecosystem- a zero-su
 
 ## Shaping The Solution  
 
-When shaping a solution for API tooling (and probably not only for API), it's important to distinguish between the two "users" of a tool/framework/design in general:
+When designing the solution, it is important to differentiate between two key user groups:
 
-- *Developers* - Those who required to implement a logic and move on. For them, we want to provide the simplest experience possible.
-- *Maintainers* - Those responsible for maintaining the service. For them, we want to give the maximum ability to extend and customize the tool's behavior to meet their needs.
+- Developers – Those who implement endpoints as part of specific features.
+  Developers want to focus on their business logic and move on quickly.For them, the goal is to provide the simplest, most intuitive experience possible.
 
-For the developes, what we want is very simple, we want them to : Write your logic, and let the infrastructure handle all the rest inlcusing full pfoofe of develops mistakes / skipping some important call / process 
+- Maintainers – The service owners responsible for the product's infrastructure and overall behavior.
+  For maintainers, it is essential to offer maximum flexibility for customizing and extending the system's behavior at both high and low levels.
 
-For the maintainers we want to build an infrastructure that will be easy to maintain and add any required common behavior, in the server or in the consumers.
+In short, developers should be able to write their logic effortlessly while the infrastructure automatically enforces all required behaviors and safety measures in a foolproof manner.
 
-To achieve that along with the requirements from the API, that design is, to use a tool that expose simple API for the developers, while handling Rest validation, authorization, etc,  expandable for common logic and most important, generates OpenAPI specification.
+For maintainers, the system should be nearly maintenance-free, with required behaviors easily distributed across both providers and consumers.
 
-Using standard specification, the consumers will use the vast available tools of OpenAPI community to automated API calls and models of the server. 
+To this end, an OpenAPI specification will be generated directly from the code.
+This means the API code serves as the definitive source of truth, with the specification acting as the "glue" that binds the entire ecosystem together.
+Consumers can then leverage a wide range of tools to automate boilerplate model and route generation, and call API endpoints seamlessly.
 
 
 ### Tooling

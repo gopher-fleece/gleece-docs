@@ -24,17 +24,21 @@ Generally, this ecosystem divides into two main sections:
 
 ### API Consumers
 
-Let's examine the API consuming ecosystem. What are the drawbacks of simply exposing a REST API and allowing the frontend or other services to use fetch (or curl, or any HTTP client tool) to interact with the API endpoints?
+Let's examine the API consumer ecosystem:
 
-There are several significant issues, among them:
+What drawbacks arise from simply exposing a RESTful API endpoint and letting frontend applications or other services interact with it using basic HTTP tools?
 
-- *Models Duplication* - While in the API source creating interfaces/types/classes to model data, each consuming service must declare these again. When the model changes, you need to update all these "mirrors" across all services. This becomes a maintenance nightmare when your API is substantial and consumed across multiple teams and technologies.
+There are several significant challenges, including:
 
-- *Runtime API Mismatches* - Mistakes are inevitable. When someone modifies an API and accidentally overlooks updating one of the consumers, everything might appear fine during the build process - until it surfaces as a runtime bug.
+    * Models Duplication – The API provider declares interfaces, types, or classes to model data, and every consumer must re-declare them.
+	When the model changes, updating these "mirrors" across all consumers becomes a maintenance nightmare—especially when the API is used by multiple teams and technologies.
 
-- *Documentation Drift* - Similar to the previous point, maintaining documentation for a live product often results in outdated information. Keeping documentation synchronized with each tiny new feature addition becomes increasingly challenging.
+    * Runtime API Mismatches – Mistakes are inevitable. When an API is modified and one or more consumers aren’t updated accordingly, issues can remain dormant until they eventually manifest at runtime, causing unexpected and disruptive production failures.
 
-- *Repeated Boilerplate* - APIs typically require common behaviors that must be duplicated for each API consumer and call when using a "naked" HTTP client.
+    * Documentation Drift – As changes are made, documentation often drifts out of sync, particularly in live, enterprise environments.
+	Keeping docs fully synchronized with each and every change quickly becomes both challenging and time-consuming.
+
+    * Repeated Boilerplate – API calls typically require common behaviors that must be duplicated for each consumer and endpoint when using a bare-bones HTTP client approach.
 
 
 ### API Source

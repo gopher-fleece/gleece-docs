@@ -3,96 +3,85 @@ title: Building a Services API Ecosystem
 ---
 
 ### This article is written by [Haim Kastner](https://github.com/haimkastner) & [Yuval Pomerchik](https://github.com/yuval-po),
-### Team & Technology leaders at Check Point Software Technologies and creators/maintainers of [Gleece](https://github.com/gopher-fleece/gleece).
+### Team & Technology Leaders at Check Point Software Technologies and creators/maintainers of [Gleece](https://github.com/gopher-fleece/gleece).
 ### All opinions expressed are their own.
 
-# The Ecosystem of an API
+# Let's Talk About API Ecosystems
 
-RESTful APIs are deceptively simple creatures — just an exchange of agreed-upon messages between client and server.
+At first glance, RESTful APIs seem pretty straightforward, right? Just a client and server trading messages in an agreed-upon format. But if you've ever built one for a real-world application, you know there's a lot more to it than that.
 
-In reality, they're often a sore point for many applications, presenting interesting challenges both architectural and practical.
+The truth is, APIs often become the pain points of applications. Why? Because there's a whole world of challenges to tackle: you've got multiple consumers across different domains, you need to handle authentication and authorization, validate inputs, manage errors, implement rate limits... and that's just scratching the surface!
 
-Designing an API means accounting for a myriad of scenarios and topics like multiple consumers across different domains, authentication and authorization with role-based access control, input validation, error handling, rate-limiting and much more.
+As your product grows, you need a robust approach that can grow with it. Let's dive into our take on treating APIs as complete ecosystems – from development to deployment, maintenance, and consumption.
 
-As our offerings grow and mature, so too must our processes.
+## Why Basic API Implementation Isn't Enough
 
-Below, we explore our perspective on APIs as holistic ecosystems — how they should be developed, deployed, maintained, and consumed.
+Let's examine this in two main parts:
 
-## Challenges with Basic API Implementation
+### The Consumer Side Story
 
-Generally, this ecosystem divides into two main sections:
+Consider a standard setup: you have a REST API endpoint, and you're allowing frontend applications or other services to interact with it using basic HTTP tools. While this appears simple, it presents several significant challenges:
 
-### API Consumers
+    * Model Duplication Challenges – Your API defines data structures, but each consumer must define them again. 
+    When changes occur, updating these duplicate definitions across all consumers becomes increasingly complex, 
+    especially when dealing with multiple teams using different technology stacks.
 
-Let's examine the API consumer ecosystem:
+    * Runtime Synchronization Issues – Changes to the API that aren't properly propagated to all consumers can 
+    create latent issues that manifest unexpectedly in production environments, leading to service disruptions.
 
-What drawbacks arise from simply exposing a RESTful API endpoint and letting frontend applications or other services interact with it using basic HTTP tools?
+    * Documentation Management – Maintaining synchronized documentation in a dynamic enterprise environment presents 
+    a significant challenge. Each change requires careful coordination to ensure documentation remains accurate.
 
-There are several significant challenges, including:
-
-    * Models Duplication – The API provider declares interfaces, types, or classes to model data, and every consumer must re-declare them.
-	When the model changes, updating these "mirrors" across all consumers becomes a maintenance nightmare - especially when the API is used by multiple teams and technologies.
-
-    * Runtime API Mismatches – Mistakes are inevitable. When an API is modified and one or more consumers aren’t updated accordingly, issues can remain dormant until they eventually manifest at runtime, causing unexpected and disruptive production failures.
-
-    * Documentation Drift – As changes are made, documentation often drifts out of sync, particularly in live, enterprise environments.
-	Keeping docs fully synchronized with each and every change quickly becomes both challenging and time-consuming.
-
-    * Repeated Boilerplate – API calls typically require common behaviors that must be duplicated for each consumer and endpoint when using a bare-bones HTTP client approach.
+    * Repetitive Implementation Patterns – Using basic HTTP clients necessitates repeating similar code patterns 
+    across consumers and endpoints, leading to inefficient development processes and potential inconsistencies.
 
 
-### API Providers
+### The Provider's Perspective
 
-Similarly, for API providers, simply adding new endpoints and their associated logic will not suffice for a production-grade product.
+Building a production-ready API requires much more than implementing endpoints and their core logic. A robust API endpoint needs several essential features:
 
-A "real" API endpoint will likely require multiple common behaviors such as:
+- *Input Validation* (ensuring data integrity)
+- *Role-Based Access Control* (managing access permissions effectively)
+- *Documentation* (maintaining clear and current reference materials)
+- *Logging* (tracking system behavior and issues)
+- *Telemetry* (measuring and monitoring performance)
 
-- *Input Validation* 
-- *Role-Based Access Control (RBAC)* 
-- *Documentation* 
-- *Logging*
-- *Telemetry*
+Implementing these features individually for each endpoint quickly becomes unsustainable and error-prone.
 
-Implementing these behaviors for every endpoint is an error-prone nightmare.
+## What We Really Need
 
-
-## Requirements For The Solution
-
-The solution should ensure that:
-
+Here's our vision for an ideal solution:
 - Documentation is always up-to-date.
 - Consumers are always synchronized with the provider's specification.
 - API changes do not require in-depth knowledge or force developers to "remember" to add essential behaviors (e.g., validation, authorization).
 - API changes are safe by design.
 - Implementations require minimal boilerplate.
 - Common behaviors follow a unified standard (e.g., consistent error formats).
-- Straightforward ways to control and customize common behaviors at both system and endpoint levels.
+- There are straightforward ways to control and customize common behaviors at both system and endpoint levels.
 
-Overall, the solution should yield a predictable and stable ecosystem- a zero-surprise product.
+Overall, the solution should yield a predictable and stable ecosystem — a zero-surprise product.
 
-## Shaping The Solution  
+## Designing the Solution
 
 When designing system architecture, one crucial yet often overlooked factor is the human element: the people who will contribute and maintain it.
 
 Key questions to consider:
-- Who will be writing code for this system?
+- Who will be writing the code?
 - What are their mindsets and workflows?
 - What expectations should we set for contributors?
 
 These questions are crucially important for any system that's not only technically sound but also sustainable and enjoyable to work with.
 
-With this understanding, we distinguishes between two key roles:
+With this understanding, we distinguish between two key roles:
 
-- Developers – Those who implement endpoints as part of specific features.
-  Developers want to focus on their business logic and move on quickly.
+- Developers – Those implementing endpoints for specific features.
+  They need to focus on business logic with minimal overhead.
   For them, the goal is to provide the simplest, most intuitive experience possible.
 
 - Maintainers – The service owners responsible for the product's infrastructure and overall behavior.
-  For maintainers, it is essential to offer maximum flexibility for customizing and extending the system's behavior at both high and low levels.
+  For them, it is essential to offer maximum flexibility for customizing and extending the system's behavior at both high and low levels.
 
-In short, developers should be able to write their logic effortlessly while the infrastructure automatically enforces all required behaviors and safety measures in a foolproof manner.
-
-For maintainers, the system should be nearly maintenance-free, with required behaviors easily distributed across both providers and consumers.
+The ideal architecture allows developers to write logic efficiently while the infrastructure automatically handles safety and behavior requirements. Simultaneously, maintainers receive a low-maintenance system with comprehensive customization options.
 
 To this end, an OpenAPI specification will be generated directly from the code.
 This means the API code serves as the definitive source of truth, with the specification acting as the "glue" that binds the entire ecosystem together.
@@ -100,26 +89,26 @@ Consumers can then leverage a wide range of tools to automate boilerplate model 
 
 ### Tooling
 
-With this vision in mind and drawing massive inspiration from the [TSOA](https://tsoa-community.github.io/docs/) TypeScript project,
-we've created the [Gleece](https://github.com/gopher-fleece/gleece) project for Golang.
+With this vision in mind and drawing inspiration from the [TSOA](https://tsoa-community.github.io/docs/) project in TypeScript,
+we developed [Gleece](https://github.com/gopher-fleece/gleece) for Golang.
 
-Gleece analyzes controllers and their associated functions and structs to generate both:
+Gleece analyzes controllers and their associated functions and structs to generate:
 
-1. An *OpenAPI* specification `v3.0.0`/`v3.1.0` that will be used by all API consumers
+1. An *OpenAPI* specification (`v3.0.0`/`v3.1.0`) that will be used by all API consumers
 
 2. A fully featured set of routes, to be used with a router of choice (e.g., `gin` or `echo`).
-   Route generation employs a standard Handlebars templating engine.
+   Route generation employs a standard Handlebars template engine.
 
 This optimizes the developer's day-to-day experience by abstracting away most complexity
 while the generative approach provides maintainers with simple yet powerful ways to extend or
 replace templates for deep customization of custom behaviors without sacrificing ease of use or
-higher level configurations such as middleware injection sites (e.g., `beforeOperation`)
+higher-level configurations such as middleware injection sites (e.g., `beforeOperation`)
 
-The final generated code is designed to behave like human-written code; Fast, readable, easily debuggable, and bypassable, when necessary.
+The final generated code is designed to behave like human-written code; Fast, readable, easily debuggable, and bypassable when necessary.
 
 ### What Should The Developer's Experience Look Like?
 
-The developer experience should looks like this, simply create struct, declare function and Go.
+The developer experience should look similarly to this — simply create a struct, declare a function, and Go.
 
 ```go
 // @Description Example object
@@ -145,29 +134,29 @@ func (ec *ExampleController) ExampleLogic(
 }
 ```
 
-The above example illustrates the typical developer experience- simply write a function and structs and annotate them.
+The above example illustrates the typical developer experience — simply write a function and structs and annotate them.
 
 ### What Should The Maintainer's Experience Be?
 
-The toolkit should provide the essential logic and documentation out-of-box and let maintainer focus on adjusting it to their specific needs.
+The toolkit should provide the essential logic and documentation out-of-box and let maintainers focus on adjusting it to their specific needs.
 Maintainers should be able to, for instance, enforce standard security measures, integrate complex telemetry systems or apply
-smart, per-endpoint rate-limits without affecting the developer's experience.
+smart, per-endpoint rate limits without affecting the developer's experience.
 
-In practice, this facet is difficult to visualize as it highly dependent on the chosen toolkit.
+In practice, this facet is difficult to visualize as it is highly dependent on the chosen toolkit.
 
-## Infrastructure by OpenAPI
+## OpenAPI As An Infrastructure
 
 Once the API provider is built, the "output" is the *OpenAPI* specification.
 Consumers can use tools such as [`@openapitools/openapi-generator-cli`](https://www.npmjs.com/package/@openapitools/openapi-generator-cli) to generate
 the necessary models and calls.
 
-As the process is fully programmatic, it can and *should* be integrated into the *CI/CD* pipeline- providers publish specifications and consumer builds "pull"
+As the process is fully programmatic, it can and *should* be integrated into the *CI/CD* pipeline — providers publish specifications and consumer builds "pull"
 them, drastically reducing the chance for silent accidental API mismatches and ensuring changes propagate effortlessly across the entire ecosystem.
 
 
-# Conclusion
+## Conclusion
 
-Implementing, deploying and maintaining an API can be fun - or a nightmare.
+Implementing, deploying and maintaining an API can be fun — or a nightmare.
 The main difference lies in a holistic view that considers the shortcomings of existing approaches and places emphasis on developer experience and psychology.
 
 We hope this brief article would help bring others the same enjoyment it has brought us.

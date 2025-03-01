@@ -66,13 +66,22 @@ The solution should ensure that:
 - API changes are safe by design.
 - Implementations require minimal boilerplate.
 - Common behaviors follow a unified standard (e.g., consistent error formats).
-- Maintainers have straightforward ways to control and customize common behaviors at both system and endpoint levels.
+- Straightforward ways to control and customize common behaviors at both system and endpoint levels.
 
 Overall, the solution should yield a predictable and stable ecosystem- a zero-surprise product.
 
 ## Shaping The Solution  
 
-When designing the solution, it is important to differentiate between two key user groups:
+When designing system architecture, one crucial yet often overlooked factor is the human element: the people who will contribute and maintain it.
+
+Key questions to consider:
+- Who will be writing code for this system?
+- What is their mindset and workflow?
+- What expectations should we set for contributors?
+
+Taking these human factors into account leads to systems that are not only technically sound but also sustainable and enjoyable to work with.
+
+With this understanding, we distinguishes between two key roles:
 
 - Developers – Those who implement endpoints as part of specific features.
   Developers want to focus on their business logic and move on quickly.For them, the goal is to provide the simplest, most intuitive experience possible.
@@ -88,23 +97,24 @@ To this end, an OpenAPI specification will be generated directly from the code.
 This means the API code serves as the definitive source of truth, with the specification acting as the "glue" that binds the entire ecosystem together.
 Consumers can then leverage a wide range of tools to automate boilerplate model and route generation, and call API endpoints seamlessly.
 
-
 ### Tooling
 
 With this vision in mind and drawing massive inspiration from the [TSOA](https://tsoa-community.github.io/docs/) TypeScript project, we've created the [Gleece](https://github.com/gopher-fleece/gleece) project for Golang.
 
-Gleece analyzes controllers and their associated functions to generate both an *OpenAPI* specification and routes for use with a user-provided routing engine (e.g., `gin` or `echo`).
-The route generation leverages a standard Handlebars templating engine, allowing for easy yet powerful modifications.
+Gleece analyzes controllers and their associated functions and structs to generate both:
 
-This approach optimizes the day-to-day experience for developers by producing routes that behave like human-written code—readable,
-easily debuggable, and bypassable when necessary.
+1. *OpenAPI* specification `v3.0.0` / `v3.1.0` that will be used across the API consumers ecosystem
+1. Leveraging a standard Handlebars templating engine for a fully featured routes to be used with the service routing engine (e.g., `gin` or `echo`).
 
-For maintainers, the framework offers high-level configurations (such as multiple middleware injection sites, e.g., `beforeOperation`) alongside lower-level options to extend or even completely replace parts of, or entire, routing templates.
+This approach optimizes the day-to-day experience for developers to use simple and straightforward API.
 
+For maintainers, it offers high-level customization (such as multiple middleware injection sites, e.g., `beforeOperation`) while using templating for the route generation allows lower-level easy yet powerful modifications to extend or even completely replace parts of, or entire, routing behavior.
+
+And the final generated code still behave like human-written code—readable, easily debuggable, and bypassable when necessary.
 
 ### How Developer's Experience Should Looks Like? 
 
-Integrating a service with Gleece will provide a developer with an API that looks like this:
+The developer experience should looks like this, simply create strct, declare function and Go.
 
 ```go
 // @Description Example object
@@ -117,51 +127,39 @@ type Example struct {
 
 // @Description Create an example
 // @Method(POST)
-// @Route(/logic/{example_name}/{example_id})
-// @Query(email, { validate: "required,email" }) The example email
-// @Path(id, { name: "example_id", validate:"gt=1" }) The example ID
-// @Path(name, { name: "example_name" }) The example's name
+// @Route(/example-logic)
 // @Body(example) The example object
-// @Header(origin, { name: "x-origin" }) The request origin
-// @Header(trace) The trace ID
-// @Response(200) The new ID of the example
+// @Response(200) The new ID for the example
 // @ErrorResponse(500) Error when processing fails
 // @Security(securitySchemaName, { scopes: ["read", "write"] })
 func (ec *ExampleController) ExampleLogic(
-    id int,
-    email string,
-    name string,
-    origin string,
-    trace *string,
     example Example
 ) (string, error) {
     newId := uuid.New()
-    return example.Text + " " + newId.String(), nil
+    return newId.String(), nil
 }
 ```
 
-As demonstrated, the developer can simply create a function, annotate it as needed, and they are ready to go.
-
-Gleece will prepare everything else needed during the build, pre-configuring the validation, the security check, error handling, the extended common behavior, etc. And, not less important, nothing extra is required for the OpenAPI specification generation.
+As demonstrated, the developer can create a function, annotate it as needed, and this is all what he needs to do.
 
 ### How Maintainer's Experience Be?
 
-The simplest and most straightforward method is to register middlewares to handle errors and some logic to run in a request handling lifecycle.
+As explained, hance Gleece provides the crucial logic and documentation out of the box, the maintainer should be focus on just adjusting it to the service and system specific needs and common behavior.
 
-while still, in case of a full customization of the behavior, such as running each function in its own goroutine, implementing specific custom authorization mechanisms, etc., the maintainer have the ability to fully override the templates, and by it, the sky is literally the limit...
+From integrating to a telemetry or audits services to a fully behavior modifying of how routes been handled or called.
 
 All of those, while the developer's experience remains the same.
 
 ## Infrastructure by OpenAPI
 
-Once the server is ready, the "output" to the infrastructure is the OpenAPI specification. That specification should be used by all API consumers.
+Once the server is built, the "output" to the infrastructure is the OpenAPI specification. That specification should be used by all API consumers.
 
 We have used `@openapitools/openapi-generator-cli` to generate the interfaces and the API for our consumers.
 
 One of the key features in generating code is the ability to override templates, allowing the maintainers to modify the generated code to the service's needs, while developers are free to just use the generated API.
 
-Integrating it with the CI/CD process ensures there is no chance of mismatches in APIs deployed to your system.
+Integrating it with the CI/CD process ensures there is a lower chance of mismatches in APIs deployed to your system.
 
 # Conclusion
 
-Implementing and deploying an API can be fun or a nightmare. The difference lies in the holistic design that ensures developers focus on the core implementation of the logic, architects can adjust and customize the usage tooling to the product requirements, and the tool in use provides a specification that will be used in the consumer in the same manner.
+Implementing and deploying an API can be fun or a nightmare. The difference lies in the holistic approach that ensures that every aspect in the system is treated and taked into account during the design, including the roles and the mindset of the persons who should contribute to the system as whole. 

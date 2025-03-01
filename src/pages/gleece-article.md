@@ -91,13 +91,15 @@ Consumers can then leverage a wide range of tools to automate boilerplate model 
 
 ### Tooling
 
-With that vision, and with a massive inspiration from the [TSOA](https://tsoa-community.github.io/docs/) project for TypeScript, we have created the [Gleece](https://github.com/gopher-fleece/gleece) project for `Golang`.
+With this vision in mind and drawing massive inspiration from the [TSOA](https://tsoa-community.github.io/docs/) TypeScript project, we've created the [Gleece](https://github.com/gopher-fleece/gleece) project for Golang.
 
-A tool that analyzes controller functions and generates a bunch of routes that will be added to the server's routing engine.
+Gleece analyzes controllers and their associated functions to generate both an *OpenAPI* specification and routes for use with a user-provided routing engine (e.g., `gin` or `echo`).
+The route generation leverages a standard Handlebars templating engine, allowing for easy yet powerful modifications.
 
-This approach maximizes developers' day-to-day usage while the generated routes act at runtime like any other human-written routes, readable, easy to debug, and bypass when needed.
+This approach optimizes the day-to-day experience for developers by producing routes that behave like human-written code—readable,
+easily debuggable, and bypassable when necessary.
 
-Similarly, this approach gives the maintainers not only a way to inject some middlewares but also the abilities to modify the final routes to the exact needs, due to the fact that the route templates can be extended and even fully overridden.
+For maintainers, the framework offers high-level configurations (such as multiple middleware injection sites, e.g., `beforeOperation`) alongside lower-level options to extend or even completely replace parts of, or entire, routing templates.
 
 
 ### How Developer's Experience Should Looks Like? 

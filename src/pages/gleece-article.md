@@ -117,9 +117,9 @@ higher level configurations such as middleware injection sites (e.g., `beforeOpe
 
 The final generated code is designed to behave like human-written code; Fast, readable, easily debuggable, and bypassable, when necessary.
 
-### How Developer's Experience Should Looks Like? 
+### What Should The Developer's Experience Look Like?
 
-The developer experience should looks like this, simply create strct, declare function and Go.
+The developer experience should looks like this, simply create struct, declare function and Go.
 
 ```go
 // @Description Example object
@@ -145,26 +145,29 @@ func (ec *ExampleController) ExampleLogic(
 }
 ```
 
-As demonstrated, the developer can create a function, annotate it as needed, and this is all what he needs to do.
+The above example illustrates the typical developer experience- simply write a function and structs and annotate them.
 
-### How Maintainer's Experience Be?
+### What Should The Maintainer's Experience Be?
 
-As explained, hance Gleece provides the crucial logic and documentation out of the box, the maintainer should be focus on just adjusting it to the service and system specific needs and common behavior.
+The toolkit should provide the essential logic and documentation out-of-box and let maintainer focus on adjusting it to their specific needs.
+Maintainers should be able to, for instance, enforce standard security measures, integrate complex telemetry systems or apply
+smart, per-endpoint rate-limits without affecting the developer's experience.
 
-From integrating to a telemetry or audits services to a fully behavior modifying of how routes been handled or called.
-
-All of those, while the developer's experience remains the same.
+In practice, this facet is difficult to visualize as it highly dependent on the chosen toolkit.
 
 ## Infrastructure by OpenAPI
 
-Once the server is built, the "output" to the infrastructure is the OpenAPI specification. That specification should be used by all API consumers.
+Once the API provider is built, the "output" is the *OpenAPI* specification.
+Consumers can use tools such as [`@openapitools/openapi-generator-cli`](https://www.npmjs.com/package/@openapitools/openapi-generator-cli) to generate
+the necessary models and calls.
 
-We have used `@openapitools/openapi-generator-cli` to generate the interfaces and the API for our consumers.
+As the process is fully programmatic, it can and *should* be integrated into the *CI/CD* pipeline- providers publish specifications and consumer builds "pull"
+them, drastically reducing the chance for silent accidental API mismatches and ensuring changes propagate effortlessly across the entire ecosystem.
 
-One of the key features in generating code is the ability to override templates, allowing the maintainers to modify the generated code to the service's needs, while developers are free to just use the generated API.
-
-Integrating it with the CI/CD process ensures there is a lower chance of mismatches in APIs deployed to your system.
 
 # Conclusion
 
-Implementing and deploying an API can be fun or a nightmare. The difference lies in the holistic approach that ensures that every aspect in the system is treated and taked into account during the design, including the roles and the mindset of the persons who should contribute to the system as whole. 
+Implementing, deploying and maintaining an API can be fun - or a nightmare.
+The main difference lies in a holistic view that considers the shortcomings of existing approaches and places emphasis on developer experience and psychology.
+
+We hope this brief article would help bring others the same enjoyment it has brought us.

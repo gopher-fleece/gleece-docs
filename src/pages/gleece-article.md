@@ -76,15 +76,16 @@ When designing system architecture, one crucial yet often overlooked factor is t
 
 Key questions to consider:
 - Who will be writing code for this system?
-- What is their mindset and workflow?
+- What are their mindsets and workflows?
 - What expectations should we set for contributors?
 
-Taking these human factors into account leads to systems that are not only technically sound but also sustainable and enjoyable to work with.
+These questions are crucially important for any system that's not only technically sound but also sustainable and enjoyable to work with.
 
 With this understanding, we distinguishes between two key roles:
 
 - Developers – Those who implement endpoints as part of specific features.
-  Developers want to focus on their business logic and move on quickly.For them, the goal is to provide the simplest, most intuitive experience possible.
+  Developers want to focus on their business logic and move on quickly.
+  For them, the goal is to provide the simplest, most intuitive experience possible.
 
 - Maintainers – The service owners responsible for the product's infrastructure and overall behavior.
   For maintainers, it is essential to offer maximum flexibility for customizing and extending the system's behavior at both high and low levels.
@@ -99,18 +100,22 @@ Consumers can then leverage a wide range of tools to automate boilerplate model 
 
 ### Tooling
 
-With this vision in mind and drawing massive inspiration from the [TSOA](https://tsoa-community.github.io/docs/) TypeScript project, we've created the [Gleece](https://github.com/gopher-fleece/gleece) project for Golang.
+With this vision in mind and drawing massive inspiration from the [TSOA](https://tsoa-community.github.io/docs/) TypeScript project,
+we've created the [Gleece](https://github.com/gopher-fleece/gleece) project for Golang.
 
 Gleece analyzes controllers and their associated functions and structs to generate both:
 
-1. *OpenAPI* specification `v3.0.0` / `v3.1.0` that will be used across the API consumers ecosystem
-1. Leveraging a standard Handlebars templating engine for a fully featured routes to be used with the service routing engine (e.g., `gin` or `echo`).
+1. An *OpenAPI* specification `v3.0.0`/`v3.1.0` that will be used by all API consumers
 
-This approach optimizes the day-to-day experience for developers to use simple and straightforward API.
+2. A fully featured set of routes, to be used with a router of choice (e.g., `gin` or `echo`).
+   Route generation employs a standard Handlebars templating engine.
 
-For maintainers, it offers high-level customization (such as multiple middleware injection sites, e.g., `beforeOperation`) while using templating for the route generation allows lower-level easy yet powerful modifications to extend or even completely replace parts of, or entire, routing behavior.
+This optimizes the developer's day-to-day experience by abstracting away most complexity
+while the generative approach provides maintainers with simple yet powerful ways to extend or
+replace templates for deep customization of custom behaviors without sacrificing ease of use or
+higher level configurations such as middleware injection sites (e.g., `beforeOperation`)
 
-And the final generated code still behave like human-written code—readable, easily debuggable, and bypassable when necessary.
+The final generated code is designed to behave like human-written code; Fast, readable, easily debuggable, and bypassable, when necessary.
 
 ### How Developer's Experience Should Looks Like? 
 

@@ -6,14 +6,23 @@ sidebar_position: 6
 
 Gleece provides middleware support for request processing.
 
-Middleware events can be triggered at three points:
-- Before the operation/function execution: `beforeOperation`
-- After successful operation completion: `afterOperationSuccess`
-- After operation failure: `onOperationError`
+Middleware events can be triggered at three distinct points:
 
-Each middleware receives the router's context (specific to the engine in use). For `onOperationError` events, the middleware also receives the error instance.
+- Operational Events
+    - `beforeOperation`: Executes before the operation/function
+    - `afterOperationSuccess`: Executes after successful operation completion
+- Error Events
+    - `onInputValidationError`: Triggered when input validation fails
+    - `onOperationError`: Triggered after operation failure
+    - `onOutputValidationError`: Triggered when output validation fails (output validation is disabled by default, see [Validating Response Payloads](/docs/basics/VALIDATION.mdx#validating-response-payloads))
 
-The middleware returns a boolean value that determines whether to continue execution (`true`) or abort it (`false`). Typically, execution is aborted when the response is handled within the middleware function.
+Each middleware receives the router's context (specific to the engine in use). 
+
+For error events, the middleware also receives the error instance.
+
+Middlewares return a boolean value that determines the flow of execution:
+- `true`: Continue with the normal execution flow
+- `false`: Abort execution (typically used when the response has been handled within the middleware)
 
 ## Implementing Middleware
 

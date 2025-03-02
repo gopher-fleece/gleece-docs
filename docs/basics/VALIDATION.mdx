@@ -4,7 +4,7 @@ sidebar_position: 5
 
 # Payload Validation
 
-Input validation is simplified by Gleece using [go-playground/validator](https://github.com/go-playground/validator) v10 format.  
+Input validation in Gleece is simplified through the use of [go-playground/validator](https://github.com/go-playground/validator) v10 format.  
 
 Gleece passes validation rules to the `go-playground/validator` engine during request processing, exposes them in the OpenAPI v3 specification (where supported), and returns a 422 status code if validation fails.
 
@@ -13,8 +13,6 @@ Gleece passes validation rules to the `go-playground/validator` engine during re
 Explore the full validation options in the [go-playground/validator](https://pkg.go.dev/github.com/go-playground/validator/v10#section-readme) documentation.
 
 :::
-
-> 
 
 ## Validating Struct Fields
 
@@ -62,7 +60,39 @@ func (ec *UserController) CreateNewUser(email string, name string, domicile Domi
 
 > For REST parameters, non-pointer values are always considered mandatory, regardless of the `validate` content. Path parameters are always mandatory as per the OpenAPI specification (a missing path results in a `404` error).
 
-# Custom Validators
+## Validating Response Payloads
+
+By default, Gleece does not validate response payloads against the response schema defined in the route. 
+
+To enable response payload validation, set the `validateResponsePayload` field to `true` in the `routesConfig` section of the configuration file:
+
+```json
+{
+    "routesConfig": {
+        "validateResponsePayload": true
+    }
+}
+```
+
+When enabled, Gleece validates the response payload against the defined response schema for the route. 
+
+If validation fails, Gleece returns a `500` status code with a generic error message.
+
+:::info
+
+The response payload validation is **only** applied to routes with a defined response struct schema.
+
+:::
+
+:::warning
+
+When response payload validation is enabled, Gleece does not return the actual validation error message to the client to avoid exposing server internals.
+
+It is highly recommended to add an `onOutputValidationError` middleware to log or handle the error appropriately.
+
+:::
+
+## Custom Validators
 
 Gleece supports custom validators in a manner similar to `go-playground/validator`.
 

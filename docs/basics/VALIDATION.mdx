@@ -62,7 +62,7 @@ func (ec *UserController) CreateNewUser(email string, name string, domicile Domi
 
 ## Validating Response Payloads
 
-By default, Gleece does not validate response payloads against the response schema defined in the route. 
+By default, Gleece does not validate the responses payloads. 
 
 To enable response payload validation, set the `validateResponsePayload` field to `true` in the `routesConfig` section of the configuration file:
 
@@ -80,13 +80,13 @@ If validation fails, Gleece returns a `500` status code with a generic error mes
 
 :::info
 
-The response payload validation is **only** applied to routes with a defined response struct schema.
+The response payload validation is **only** applied to routes with a struct as the defined response type.
 
 :::
 
 :::warning
 
-When response payload validation is enabled, Gleece does not return the actual validation error message to the client to avoid exposing server internals.
+Gleece does not return the actual validation error message of the responses to the client to avoid exposing server internals.
 
 It is highly recommended to add an `onOutputValidationError` middleware to log or handle the error appropriately.
 

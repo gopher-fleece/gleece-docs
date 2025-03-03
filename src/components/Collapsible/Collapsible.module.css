@@ -1,0 +1,56 @@
+.codeWrapper {
+    position: relative;
+    margin-bottom: 1rem;
+}
+
+.codeBlock {
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+}
+
+.collapsed {
+    position: relative;
+}
+
+.collapsed::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100px; /* Increased height for better gradient effect */
+    background: linear-gradient(
+        to bottom,
+        transparent 0%,
+        var(--ifm-background-surface-color) 90%
+    );
+    /* Add a solid color at the bottom to ensure complete coverage */
+    border-bottom: 12px solid var(--ifm-background-surface-color);
+    pointer-events: none;
+}
+
+.toggleButton {
+    display: block;
+    width: 100%;
+    padding: 8px;
+    background: var(--ifm-color-primary);
+    color: var(--ifm-color-white);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 8px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: background-color 0.2s ease;
+    position: relative;
+    z-index: 2; /* Ensure button stays above gradient */
+}
+
+.toggleButton:hover {
+    background: var(--ifm-color-primary-darker);
+}
+
+.toggleButton:focus {
+    outline: 2px solid var(--ifm-color-primary);
+    outline-offset: 2px;
+}

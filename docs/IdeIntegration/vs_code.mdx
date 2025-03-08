@@ -2,16 +2,11 @@
 sidebar_position: 1
 ---
 
-import { Collapsible } from '@site/src/components/Collapsible/Collapsible';
-
 # Visual Studio Code
 
 While *Gleece*'s comment-based annotation format is designed to be intuitive and familiar, it still requires some taking used to.
 
 The *Gleece Visual Studio Code* extension provides useful functionality and diagnostics to simplify and enrich your development experience.
-
-
-It parses your `gleece.config.json` configuration file, analyzes and highlights annotations in real-time, and provides immediate feedback for any potential issues.
 
 ## Features
 
@@ -23,7 +18,9 @@ It parses your `gleece.config.json` configuration file, analyzes and highlights 
 - **Code Actions**: Quick fixes and refactoring suggestions
 
 ## Visual Preview
-![Gleece Extension in Action](https://raw.githubusercontent.com/gopher-fleece/gleece-vscode-extension/refs/heads/main/resources/after.png)
+
+<img src={require('@site/static/img/examples/VisualPreview.png').default} />
+
 *Example showing annotation highlighting and validation features*
 
 ## Quick Start
@@ -36,7 +33,7 @@ For more details and updates, visit the [VS Code Marketplace](https://marketplac
 
 ## Configuration
 
-`Gleece` comes with a few handy configuration options, accessible via *VS Code*'s `Settings` page.
+The *Gleece* extension comes with a few handy configuration options, accessible via *VS Code*'s `Settings` page.
 
 * *Config Path*
   - **Description**: Controls where the extension looks for the `gleece.config.json` file.
@@ -76,7 +73,7 @@ Symbolic awareness analyzes your code to produce in depth, contextual informatio
 
 It serves as the basis for a multitude of useful features:
 
-* *Controller/Receiver Context*
+
   - *Annotation placement*
     Certain annotations can only be applied to either a controller or a receiver.
     An example could be `@Tag`. Tags are valid only for controllers.
@@ -85,9 +82,29 @@ It serves as the basis for a multitude of useful features:
     to them (as it is recommended to provide explicit tags to all controllers) while receivers will be highlighted with an error
     as they do not accept tags.
 
-  - *Controller summary*
-    Controller summary is a nifty little feature that presents a table of all controller functions, their HTTP verbs and their routes.
+	---
 
-	<Collapsible collapsedMaxHeight="10vh">
-		<img src={require('@site/static/img/examples/ControllerSummary.png').default} />
-	</Collapsible>
+  - *Controller summary* - a nifty little feature that presents a table of all controller functions, their HTTP verbs and their routes.
+
+    <img src={require('@site/static/img/examples/ControllerSummary.png').default} />
+    
+	---
+
+  - *Receiver overview* - presents information about the route currently being hovered over
+
+    <img src={require('@site/static/img/examples/ReceiverSummary.png').default} />
+
+	---
+
+  - *Contextual autocompletion* - provides autocomplete suggestions based on whether the annotated entity is a controller or receiver
+
+	---
+
+  - *Receiver parameter validation* - Leveraging symbolic analysis allows for extensive receiver-level
+  link validation such as:
+
+     * URL parameter => `@Path` annotation
+	 * `@Path` annotation => Receiver parameter
+	 * `@Path` parameter/alias => URL parameter
+	 * `@Header`, `@Query`, `@Body` => Receiver parameter
+	 * Exactly one annotation for each receiver parameter

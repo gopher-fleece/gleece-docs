@@ -2,25 +2,25 @@
 sidebar_position: 1
 ---
 
-# VS Code
+# Visual Studio Code
 
-Gleece uses Golang comments for annotating controllers and routes.
+While *Gleece*'s comment-based annotation format is designed to be intuitive and familiar, it still requires some taking used to.
 
-The Gleece VS Code extension is designed to improve development experience by providing intelligent annotation support. 
-
-It parses your `gleece.config.json` configuration file, analyzes and highlights annotations in real-time, and provides immediate feedback for any potential issues.
+The *Gleece Visual Studio Code* extension provides useful functionality and diagnostics to simplify and enrich your development experience.
 
 ## Features
 
 - **Syntax Highlighting**: Improved readability of Gleece-specific elements
-- **Real-time Processing**: Instant visual feedback as you write
 - **Warning & Error Indicators**: Real-time markers and tips
 - **Documentation Tooltips**: Instant documentation on hover for Gleece elements
 - **Parameter Hints**: Function parameter information and suggestions
+- **Configuration highlighting**: Provides information about configuration entries and provides autocompletion
 - **Code Actions**: Quick fixes and refactoring suggestions
 
 ## Visual Preview
-![Gleece Extension in Action](https://raw.githubusercontent.com/gopher-fleece/gleece-vscode-extension/refs/heads/main/resources/after.png)
+
+<img src={require('@site/static/img/examples/VisualPreview.png').default} />
+
 *Example showing annotation highlighting and validation features*
 
 ## Quick Start
@@ -31,10 +31,80 @@ It parses your `gleece.config.json` configuration file, analyzes and highlights 
 
 For more details and updates, visit the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=haim-kastner.gleece-extension).
 
-## Extension Configuration
+## Configuration
 
-You can configure the `Gleece` extension, same as any other extension in VS Code.
+The *Gleece* extension comes with a few handy configuration options, accessible via *VS Code*'s `Settings` page.
 
-Open VS Code settings and search for `gleece`.
+* *Config Path*
+  - **Description**: Controls where the extension looks for the `gleece.config.json` file.
+   Please note that file name changes may cause configuration linting to fail due to limitations with the *VS Code* API.
+  - **Type**: `string`
+  - **Default**: `./gleece.config.json`
+  - **Key**: `gleece.config.path`
 
-Then you can change the Gleece config file path, change analysis mode, etc.
+* *Enable Symbolic Awareness*
+  - **Description**: Controls whether symbolic analysis is enabled.
+
+    Symbolic analysis provides contextual, in depth error checking and highlighting as well as features
+	like controller summaries and route overviews.
+
+	It is recommended to enable this feature for the best experience.
+
+	For in depth information, see the [Symbolic Analysis](#symbolic-awareness) sub-section
+  - **Type**: `boolean`
+  - **Default**: `true`
+  - **Key**: `gleece.analysis.enableSymbolicAwareness`
+
+* *Analysis Mode*
+  - **Description**: Controls whether the extension fully re-analyzes files on every change or attempts a differential analysis.
+    It is recommended to use `full` for the most robust experience.
+  - **Type**: `full`, `differential`
+  - **Default**: `full`
+  - **Key**: `gleece.analysis.mode`
+
+
+### Symbolic Awareness
+
+:::note
+This is an advanced topic, addressed mainly at developers interested in the inner workings of the extension.
+:::
+
+Symbolic awareness analyzes your code to produce in depth, contextual information about controllers and receivers.
+
+It serves as the basis for a multitude of useful features:
+
+
+  - *Annotation placement*
+    Certain annotations can only be applied to either a controller or a receiver.
+    An example could be `@Tag`. Tags are valid only for controllers.
+
+    With symbolic awareness enabled, controllers missing `@Tag` annotations will have a warning attached
+    to them (as it is recommended to provide explicit tags to all controllers) while receivers will be highlighted with an error
+    as they do not accept tags.
+
+	---
+
+  - *Controller summary* - a nifty little feature that presents a table of all controller functions, their HTTP verbs and their routes.
+
+    <img src={require('@site/static/img/examples/ControllerSummary.png').default} />
+    
+	---
+
+  - *Receiver overview* - presents information about the route currently being hovered over
+
+    <img src={require('@site/static/img/examples/ReceiverSummary.png').default} />
+
+	---
+
+  - *Contextual autocompletion* - provides autocomplete suggestions based on whether the annotated entity is a controller or receiver
+
+	---
+
+  - *Receiver parameter validation* - Leveraging symbolic analysis allows for extensive receiver-level
+  link validation such as:
+
+     * URL parameter => `@Path` annotation
+	 * `@Path` annotation => Receiver parameter
+	 * `@Path` parameter/alias => URL parameter
+	 * `@Header`, `@Query`, `@Body` => Receiver parameter
+	 * Exactly one annotation for each receiver parameter

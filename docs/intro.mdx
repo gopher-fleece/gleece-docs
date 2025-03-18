@@ -190,6 +190,17 @@ func (ec *UsersController) GetUser(id string) (string, error) {
 
 Every route function must declare at least one return type: `error`. For operations without a response payload, `error` will be the only return type. For operations that return data, the response payload (`string`, `struct` etc.) must be the first return value, followed by error as the second return value.
 
+:::info
+### Type Support Across Packages
+
+Gleece supports using types from imported packages in your route function parameters and return types. This includes:
+
+- Structs defined in external packages
+- Primitive type aliases (like enums) from imported modules
+- Any other Go types that are compatible with Gleece's parameter handling
+
+:::
+
 :::tip
 
 To enhance your development experience with Gleece, we provide an official [VSCode extension](https://marketplace.visualstudio.com/items?itemName=haim-kastner.gleece-extension) that provides intelligent annotation highlighting and improved code visibility.

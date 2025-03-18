@@ -69,6 +69,10 @@ Below are all the options with comments explaining each property:
         "specGeneratorConfig": { // Mandatory
             "outputPath": "./dist/openapi.json" // Mandatory - The path of the generated OpenAPI specification file
         }
+    },
+    "experimentalConfig" : { // Optional
+        "validateTopLevelOnlyEnum" : false, // Optional - If set to true, Gleece will validate only the top-level enums in the request/response payloads
+        "generateEnumValidator" : false // Optional - If set to true, Gleece will generate a custom validator for enums
     }
 }
 ```

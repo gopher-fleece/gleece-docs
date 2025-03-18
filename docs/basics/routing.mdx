@@ -54,17 +54,18 @@ func (ec *ExampleController) SimpleGet(name string) (string, error) {
 - `@Path`      - URL path parameters
 - `@Header`    - HTTP headers
 - `@Body`      - Request body
-- `@FromField` - Request urlencoded from fields
+- `@FromField` - Request urlencoded form fields
 
-Multiple instances of `@Query`, `@Path`, `@FromField`, and `@Header` annotations is allowed in a single route. 
+Multiple instances of `@Query`, `@Path`, `@FromField`, and `@Header` annotations are allowed in a single route. 
 
 However, only one `@Body` annotation is allowed per route.
 
 :::info
 ### Parameter Types
 
-- **Primitive Types**: All primitive types (and their pointer variants) are supported across all parameter sources, (exceps for `@Body`).
-- **Struct Types**: Only supported when used with the `@Body` parameter
+- **Primitive Types**: All primitive types (and their pointer variants) are supported across all parameter sources (except for `@Body`). This includes type aliases and custom enum types.
+- **Struct Types**: Only supported when used with the `@Body` parameter. Both individual structs and slices of structs are fully supported.
+
 :::
 
 :::warning
@@ -75,6 +76,21 @@ The `@Body` and `@FromField` annotations should not be used together in the same
 - `@FromField` - Processes individual fields from `application/x-www-form-urlencoded` request payload
 - `@Body` - Processes complete `application/json` request payload
 :::
+
+## Response Types
+
+Route handlers in Gleece follow a consistent return pattern. While the return type is optional, when specified, it should be a tuple in the form of `(interface{}, error)`:
+
+- The first value represents the response payload that will be serialized to JSON
+- The second value indicates any error that occurred during processing
+
+The response payload can be:
+- Primitive types (string, int, bool, etc.)
+- Struct types (custom objects)
+- Slices of any supported type
+- Pointers to any of the above
+
+> Note that `map` is not supported as response types.
 
 ## Complete Example
 

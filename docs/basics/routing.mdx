@@ -79,7 +79,7 @@ The `@Body` and `@FromField` annotations should not be used together in the same
 
 ## Response Types
 
-Route handlers in Gleece follow a consistent return pattern. While the return type is optional, when specified, it should be a tuple in the form of `(interface{}, error)`:
+Route handlers in Gleece follow a consistent return pattern. While the return type is optional, when specified, it should be a tuple in the form of `(<response type>, error)`:
 
 - The first value represents the response payload that will be serialized to JSON
 - The second value indicates any error that occurred during processing
@@ -143,5 +143,15 @@ func (ec *ExampleController) ExampleLogic(
     return example.Text + " " + newId.String(), nil
 }
 ```
+
+:::warning
+### Cross-Package Type Usage
+
+While structs and type aliases in API routes can be declared in any package, including external imported packages, the type names must be unique across all API routes.
+
+Using the same struct name from different packages is not supported.
+
+For example, if you have `package1.User` and `package2.User`, you can use only one of them across all API routes.
+:::
 
 For detailed information about all available annotations and their options, please refer to the [Annotations](/docs/extras/annotations) page.

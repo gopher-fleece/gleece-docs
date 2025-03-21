@@ -1,0 +1,111 @@
+---
+sidebar_position: 4
+---
+
+# Experimental Features
+
+:::danger Disclaimer
+
+The following features are experimental and may change in future versions.
+
+Please do not use them unless you understand the risks and the potential changes that may occur.
+
+:::
+
+## Enum Validation
+
+Enums in Go are tricky. There is no "real" enum type in Go, but aliases of primitive types can be "extended" with predefined values to act as enums.
+
+This means that the only validation that comes out of the box using `go-playground/validator` is that the value matches the type of the alias, but not that it is one of the predefined values.
+
+To validate that a value is within the allowed enum values, you need to add an `oneof` validation to the field's tag.
+
+For example, the following code:
+```go
+type MyEnum string
+
+const (
+    MyEnumValue1 MyEnum = "value1"
+    MyEnumValue2 MyEnum = "value2"
+)
+
+type MyStruct struct {
+    MyEnumField MyEnum `json:"myEnumField" validate:"required"`
+}
+```
+
+Will validate that the `MyEnumField` is a string, but not that it is one of the predefined values.
+
+To validate that the value is one of the predefined values, the following tag should be added to the field:
+```go
+type MyStruct struct {
+    MyEnumField MyEnum `json:"myEnumField" validate:"required,oneof=value1 value2"`
+}
+```
+
+This ensures that `MyEnumField` is one of the predefined values.
+
+However, having to specify the available values in each usage is error-prone and violates the DRY (Don't Repeat Yourself) principle. Any change to the enum requires updating all validation tags throughout your codebase.
+
+Solving this problem is not trivial, since Gleece uses `go-playground/validator` for validation, which does not support automatic enum validation out of the box.
+
+Therefore, we have added two experimental features to help with this issue, and we welcome your feedback on the best approach to take.
+
+Feel free to contact us with feedback and suggestions.
+
+### Validating Primitive Enum Parameters
+
+This feature adds a validation layer for primitive parameters.
+
+Set the `validateTopLevelOnlyEnum` to `true` in the `gleece.config.json` file:
+
+```json
+{
+    "experimentalConfig": {
+        "validateTopLevelOnlyEnum": true
+    }
+}
+```
+
+:::warning
+
+This will validate only the top level (queries, headers, etc.) enum values, and not enums within structs.
+
+:::
+
+### Generated Enum Validators 
+
+This feature adds build-time predefined validators for the enums used in your application.
+
+The name of the validator will be formatted as snake case of the enum name with an `_enum` suffix.
+
+For example, for the following enum:
+```go
+type MyOptions string
+
+const (
+    MyOptionsValue1 MyOptions = "value1"
+    MyOptionsValue2 MyOptions = "value2"
+)
+```
+
+The generated validator name will be `my_options_enum`.
+
+You can use this validator as follows:
+```go
+type MyStruct struct {
+    MyEnumField MyOptions `json:"myEnumField" validate:"required,my_options_enum"`
+}
+```
+
+This will validate that the `MyEnumField` coming in is one of the predefined values and not just any string.
+
+To enable this feature, set the `generateEnumValidator` to `true` in the `gleece.config.json` file:
+
+```json
+{
+    "experimentalConfig": {
+        "generateEnumValidator": true
+    }
+}
+```

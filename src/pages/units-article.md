@@ -167,11 +167,10 @@ var lf = units.LengthFactory{}
 // @Description Post unit API and return the processed unit
 // @Method(POST)
 // @Route(/post-unit)
-// @Query(useUnit) The unit to be used in response
 // @Body(data) The unit to process
 // @Response(200) The response with the processed unit
 // @ErrorResponse(500) The error when process failed
-func (ec *UnitsController) TestUnit(useUnit *units.LengthUnits, data units.LengthDto) (units.LengthDto, error) {
+func (ec *UnitsController) TestUnit(data units.LengthDto) (units.LengthDto, error) {
 	// The unit to be processed
 	var unit *units.Length
 
@@ -181,7 +180,7 @@ func (ec *UnitsController) TestUnit(useUnit *units.LengthUnits, data units.Lengt
 	// TODO: Process the unit (logic here)
 
 	// Return the processed unit
-	return unit.ToDto(useUnit), nil
+	return unit.ToDto(), nil
 }
 ```
 

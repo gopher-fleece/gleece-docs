@@ -1,0 +1,177 @@
+---
+sidebar_position: 2
+---
+
+# Modeling
+
+Gleece controllers allow you to use standard Go primitives, structs, and type aliases as function parameters and return types. During the build process, Gleece analyzes all structs and type aliases used across API controllers to generate the routes and model specifications.
+
+### Supported Types
+
+Gleece supports a variety of types for function parameters and return values, including:
+
+- Primitive types (string, int, bool, etc.)
+- Type aliases (including enums)
+- Struct types (custom objects)
+- Slices of any supported type
+- Pointers to any of the above
+
+> Note: `map` types are not supported by Gleece.
+
+:::info
+### Type Support Across Packages
+
+Gleece supports types from third-party imported packages, including:
+
+- Structs defined in external packages
+- Primitive type aliases (such as enums) from imported modules
+- Any other Go types compatible with Gleece's model handling
+
+:::
+
+### Struct Hierarchies
+
+Gleece allows structs to reference other structs as field types, even from different packages.
+
+For example, you can define a struct with nested structs:
+
+```go
+type Address struct {
+    Street string `json:"street"`
+    City   string `json:"city"`
+}
+
+type User struct {
+    ID      int     `json:"id"`
+    Name    string  `json:"name"`
+    Address Address `json:"address"`
+}
+```
+
+In this example, `User` contains a field of type `Address`. Gleece will automatically generate an OpenAPI specification for both structs:
+
+```yaml
+components:
+  schemas:
+    Address:
+      type: object
+      properties:
+        street:
+          type: string
+        city:
+          type: string
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        address:
+          $ref: '#/components/schemas/Address'
+```
+
+Here, the `User` model includes an `address` property that references the `Address` model.
+
+### Enums / Type Aliases
+
+Gleece supports type aliases for defining enums. You can create a type alias for a primitive type and use it in your API routes.
+
+For example:
+
+```go
+type Status string
+
+const (
+    Active   Status = "active"
+    Inactive Status = "inactive"
+)
+
+type User struct {
+    ID     int    `json:"id"`
+    Name   string `json:"name"`
+    Status Status `json:"status"`
+}
+```
+
+The generated OpenAPI specification will be:
+
+```yaml
+components:
+  schemas:
+    Status:
+      type: string
+      enum:
+        - active
+        - inactive
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        status:
+          $ref: '#/components/schemas/Status'
+```
+
+:::danger
+### Enum Validation Limitations
+
+Go type aliases (commonly used for enums) do not enforce validation to ensure values match the specified enum options. By default, Gleece only validates that the value conforms to the alias's underlying type (e.g., int, string).
+
+For additional enum validation capabilities, refer to the [Enum Validation](/docs/extras/experimental#enum-validation) section in our experimental features documentation.
+:::
+
+### Struct Embedding / Inheritance
+
+Gleece supports struct embedding, allowing you to create complex data structures by composing simpler ones.
+
+For example, you can define a struct that embeds another struct:
+
+```go
+type User struct {
+    ID   int    `json:"id"`
+    Name string `json:"name"`
+}
+
+type Admin struct {
+    User
+    Permissions []string `json:"permissions"`
+}
+```
+
+Here, `Admin` inherits the fields of `User`, and you can use `Admin` as a parameter or return type in your API routes.
+
+In the generated OpenAPI specification, the `Admin` model is represented using `allOf`, combining the `User` model and `Admin` specific properties:
+
+```yaml
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+    Admin:
+      allOf:
+        - $ref: '#/components/schemas/User'
+        - type: object
+          properties:
+            permissions:
+              type: array
+              items:
+                type: string
+```
+
+:::warning
+### Cross-Package Type Usage
+
+Structs and type aliases in API routes can be declared in any package, including external packages. However, type names must be unique across all API routes.
+
+Using identical struct names from different packages is not allowed.
+
+For example, if `package1.User` and `package2.User` exist, only one can be used across all API routes.
+:::

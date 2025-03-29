@@ -60,11 +60,14 @@ Multiple instances of `@Query`, `@Path`, `@FromField`, and `@Header` annotations
 
 However, only one `@Body` annotation is allowed per route.
 
+For REST parameters a non-pointer arguments are always considered mandatory, regardless of the `validate` content. Path parameters are always mandatory as per the OpenAPI specification (a missing path results in a `404` error).
+
 :::info
 ### Parameter Types
 
-- **Primitive Types**: All primitive types (and their pointer variants) are supported across all parameter sources (except for `@Body`). This includes type aliases and custom enum types.
-- **Struct Types**: Only supported when used with the `@Body` parameter. Both individual structs and slices of structs are fully supported.
+All HTTP request parameters can be only primitives, primitives aliases/enums or pointers to primitives types.
+
+Except for `@Body` that supports only non-primitive types.
 
 :::
 
@@ -84,13 +87,8 @@ Route handlers in Gleece follow a consistent return pattern. While the return ty
 - The first value represents the response payload that will be serialized to JSON
 - The second value indicates any error that occurred during processing
 
-The response payload can be:
-- Primitive types (string, int, bool, etc.)
-- Struct types (custom objects)
-- Slices of any supported type
-- Pointers to any of the above
+The response payload can be anything that supported by Gleece's modeling. see the [Modeling](/docs/basics/modeling) page for more details.
 
-> Note that `map` is not supported as response types.
 
 ## Complete Example
 
@@ -144,14 +142,8 @@ func (ec *ExampleController) ExampleLogic(
 }
 ```
 
-:::warning
-### Cross-Package Type Usage
-
-While structs and type aliases in API routes can be declared in any package, including external imported packages, the type names must be unique across all API routes.
-
-Using the same struct name from different packages is not supported.
-
-For example, if you have `package1.User` and `package2.User`, you can use only one of them across all API routes.
-:::
+:::tip
 
 For detailed information about all available annotations and their options, please refer to the [Annotations](/docs/extras/annotations) page.
+
+:::

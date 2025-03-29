@@ -1,5 +1,5 @@
 ---
-sidebar_position: 5
+sidebar_position: 6
 ---
 
 # Data Validation
@@ -58,7 +58,7 @@ func (ec *UserController) CreateNewUser(email string, name string, domicile Domi
   - The email query parameter is mandatory
   - The value must be in a valid email format
 
-> For REST parameters, non-pointer values are always considered mandatory, regardless of the `validate` content. Path parameters are always mandatory as per the OpenAPI specification (a missing path results in a `404` error).
+> For REST parameters, non-pointer arguments are always considered mandatory, regardless of the `validate` content. Path parameters are always mandatory as per the OpenAPI specification (a missing path results in a `404` error).
 
 :::danger
 ### Enum Validation Limitations

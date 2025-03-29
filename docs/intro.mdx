@@ -131,7 +131,7 @@ See the full [configuration](/docs/extras/configuration.mdx) documentation for d
 
 Create a module and Go file for the authentication function, assuming it is `auth/security.go`. Set the package path where your security check function is located in the `routesConfig->authorizationConfig->authFileFullPackageName`.
 
-Inside the file, paste the following code. Modify the logic in `GleeceRequestAuthorization` to fit your needs:
+Inside the file, paste the following code. Later on, modify the logic in `GleeceRequestAuthorization` to fit your needs:
 
 ```go title="auth/security.go"
 package auth
@@ -156,9 +156,9 @@ func GleeceRequestAuthorization(ctx *gin.Context, check runtime.SecurityCheck) *
 
 ## Creating Controllers
 
-Create the controller `controllers/user.ctrl.go`.
+Create a controller `controllers/user.ctrl.go`.
 
-First, create a struct and embed the `GleeceController` in it. Then add a route method to the struct with the Gleece annotations:
+First, create a struct and embed the `GleeceController` in it. Then add a route method to the struct with Gleece annotations:
 
 ```go title="controllers/user.ctrl.go"
 package controllers
@@ -190,17 +190,6 @@ func (ec *UsersController) GetUser(id string) (string, error) {
 
 Every route function must declare at least one return type: `error`. For operations without a response payload, `error` will be the only return type. For operations that return data, the response payload (`string`, `struct` etc.) must be the first return value, followed by error as the second return value.
 
-:::info
-### Type Support Across Packages
-
-Gleece supports using types from imported packages in your route function parameters and return types. This includes:
-
-- Structs defined in external packages
-- Primitive type aliases (like enums) from imported modules
-- Any other Go types that are compatible with Gleece's parameter handling
-
-:::
-
 :::tip
 
 To enhance your development experience with Gleece, we provide an official [VSCode extension](https://marketplace.visualstudio.com/items?itemName=haim-kastner.gleece-extension) that provides intelligent annotation highlighting and improved code visibility.
@@ -211,14 +200,14 @@ Read more about it in [IDE Integration](/docs/category/ide-integration).
 
 ## Running the Gleece Generator
 
-Now it's ready to run the Gleece generator.
+Now it's ready for the Gleece generator process.
 
 Run the Gleece generator in your terminal:
 ```bash
 gleece
 ```
 
-By default, it reads the `gleece.config.json` configuration file.
+By default, it reads the `./gleece.config.json` configuration file.
 It generates routes based on the engine specified in `routesConfig->engine`.
 It also generates the OpenAPI specification according to the version set in `openapiGeneratorConfig->openapi`.
 

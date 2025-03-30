@@ -6,68 +6,68 @@ title: API, Units, and Quantities
 
 # API, Units, and Quantities
 
-Anyone who has ever designed an API that involves units of measurement has faced the same dilemma: what unit measurement should we choose?
+Anyone who has ever designed an API involving units of measurement has faced the same dilemma: which unit of measurement should we choose?
 
-It may sound trivial, but it isn’t.
+It may seem trivial, but it isn’t.
 
-When two components communicate via an API, one using the metric system and the other using the imperial system, what unit should the API use? Should we enforce a standard? (do we even want one?), and where should we handle all the necessary conversions?
+When two components communicate via an API, one using the metric system and the other using the imperial system, what unit should the API adopt? Should we enforce a standard? (Do we even want one?) And where should we handle all the necessary conversions?
 
-This issue goes beyond just conventions in the API implementation. It's how to declare the API schema. For example, naming a field `theDistanceInKilometers` feels awkward, we want to name it simply `theDistance`. But if we do, we risk the consumer misunderstanding our intent. Relying on documentation alone for such a fundamental aspect of our API is also not ideal.
+This issue extends beyond just API conventions, it affects the API schema itself. For example, naming a field `theDistanceInKilometers` feels awkward, we want to simply call it `theDistance`. But if we do, we risk the consumer misunderstanding our intent. Relying solely on documentation for such a fundamental aspect of our API is far from ideal.
 
-We want our API to express distances clearly, without caring whether the value is in meters or miles. Distance is distance, and the same principle applies to other units. We want to work with angles, not degrees, and speeds, not kilometers per hour. But... we must choose a specific unit, right?
+We want our API to express distances clearly, without being concerned about whether the value is in meters or miles. Distance is distance, and the same principle applies to other units. We want to work with angles, not degrees, and speeds, not kilometers per hour. But... don’t we have to choose a specific unit?
 
 What if I told you that you don’t?
 
-You don’t need to convert anything, and each service doesn’t need to know or assume how the other operates while the API is readable and easy to work with.
+You don’t need to convert anything, and each service doesn’t need to know or assume how the other operates, all while keeping the API readable and easy to use.
 
-How? let go deeper into that "problem".
+How? Let's dive deeper into this "problem."
 
 ### The Problem Goes Beyond APIs
 
-This problem isn’t limited to APIs, it affects our codebase logic, too.
+This issue isn’t limited to APIs, it affects our codebase logic as well.
 
-When we calculate distances, we use formulas that don’t inherently depend on specific units. However, because formulas are usually defined once and used in multiple places (or in external libraries) it's API written to a specific measurement (e.g. requires an integer represents meters), we must deal with back and forth unit conversions. And we need to specify whether a variable value is in meters, kilometers, miles, or knots and perform conversions as necessary.
+When we calculate distances, we use formulas that don’t inherently depend on specific units. However, because formulas are usually defined once and used in multiple places (or in external libraries), their APIs are often written with a specific measurement in mind (e.g., requiring an integer representing meters). As a result, we must deal with frequent unit conversions. We need to specify whether a variable’s value is in meters, kilometers, miles, or knots and perform conversions as necessary.
 
 This makes development clunky and error-prone.
 
-Instead of simply declaring a `distance` variable, we often end up with `distanceInMeters`, `distanceInMiles`, etc. Otherwise, there’s no way to know what unit a function expects or returns.
+Instead of simply declaring a `distance` variable, we often end up with `distanceInMeters`, `distanceInMiles`, etc. Otherwise, there’s no way to determine what unit a function expects or returns.
 
-As a result, different parts of the codebase use different units, leading to a tangled mess of endless conversions. Even if we standardize our measurement system, integrating external libraries still forces us to convert values back and forth, making our code unnecessarily complex in the best case, and hiding extremely hard-to-detect bugs in the conversion in the worst case (you end up with garbage values, and who can track down exactly where the conversion went wrong or was performed incorrectly?)
+As a result, different parts of the codebase use different units, leading to a tangled mess of endless conversions. Even if we standardize our measurement system, integrating external libraries still forces us to convert values back and forth, making our code unnecessarily complex at best and introducing hard-to-detect conversion bugs at worst (you end up with garbage values, and who can track down exactly where the conversion went wrong or was performed incorrectly?)
 
-And that’s the best-case scenario, where everything is well-documented and well-named.
+And that’s all assuming everything is well-documented and well-named.
 
-Unfortunately, this is not always the case. When documentation is lacking, troubleshooting and debugging such code can become even harder.
+Unfortunately, this isn’t always the case. When documentation is lacking, troubleshooting and debugging become even harder.
 
 ### What Do We Really Want?
 
-We want to treat units as units, not as their specific representations.
+We want to treat units as abstract types rather than specific representations.
 
-Just as we use integers without worrying about whether they’re little or big endian in the memory, we should be able to work with `Length`, `Angle`, `Speed`, and other unit types in a similar way.
+Just as we use integers without worrying about whether they’re little or big endian in the memory, we should be able to work with `Length`, `Angle`, `Speed`, and other unit types in a similar manner.
 
-Internally, our code should only deal with those abstract unit types. The specific representation should only be determined when interacting with external systems. For example, when calling a third-party library, we can "expose" the specific measurement value from the unit. Likewise, when receiving data, we should immediately "import" it into our internal unit representation.
+Internally, our code should only interact with these abstract unit types. The specific representation should be determined only when interacting with external systems. For example, when calling a third-party library, we can "expose" the specific measurement value from the unit. Similarly, when receiving data, we should immediately "import" it into our internal unit representation.
 
 This approach eliminates the need for manual conversions, making our codebase cleaner, more readable, easier to debug and most important can be trusted.
 
 ## Meet the UnitsNet Project
 
-The [UnitsNet](https://github.com/angularsen/UnitsNet) project was created to solve precisely this problem in software engineering.
+The [UnitsNet](https://github.com/angularsen/UnitsNet) project was created to address precisely this problem in software engineering.
 
 It provides an extensive collection of units and quantities, represented as simple objects with a straightforward API. You can create a unit object from any quantity and retrieve its value in any other quantity.
 
 One of the most powerful aspects of UnitsNet is its [definitions JSON](https://github.com/angularsen/UnitsNet/tree/master/Common/UnitDefinitions), which includes almost every imaginable measurement - length, angle, duration, temperature, mass, information, volume-flow-per-area (yes, [really](https://github.com/angularsen/UnitsNet/blob/master/Common/UnitDefinitions/VolumeFlowPerArea.json)), and many more. There are over 100 unit categories, even including [Mars time](https://github.com/angularsen/UnitsNet/blob/a37871a639d85c56d1ae7ef971b83c06728e1097/Common/UnitDefinitions/Duration.json#L159) for durations!
 
-From these definitions, the generators produces unit objects for various programming languages:
+From these definitions, the generators produce unit objects for various programming languages:
 
 - C# - [github.com/angularsen/UnitsNet](https://github.com/angularsen/UnitsNet)
 - TypeScript - [github.com/haimkastner/unitsnet-js](https://github.com/haimkastner/unitsnet-js)
 - Python - [github.com/haimkastner/unitsnet-py](https://github.com/haimkastner/unitsnet-py)
 - Golang - [github.com/haimkastner/unitsnet-go](https://github.com/haimkastner/unitsnet-go)
 
-All of these implementations share the same definitions and provide a similar API, with minor adjustments to fit each language’s conventions.
+All implementations share the same definitions and provide a similar API, with minor adjustments to fit each language’s conventions.
 
-For this article, we’ll focus on Golang, though the same concepts apply to the other implementations.
+For this article, we’ll focus on Golang, though the same concepts apply to other implementations.
 
-### How It Looks
+### How It Works
 
 ```go
 func FormulaLogic(angle *units.Angle) *units.Angle {
@@ -93,19 +93,19 @@ func main() {
 
 As demonstrated, the `Angle` unit is created in a very clear way, no one can miss what the input represents (...) then in the codebase the angle object is only used. 
 
-> The object even offers arithmetic comparison and more operations directly on the unit (see package [docs](https://github.com/haimkastner/unitsnet-go/blob/main/README.md#additional-methods)).
+> The object even supports arithmetic operations and comparisons directly on the unit (see package [docs](https://github.com/haimkastner/unitsnet-go/blob/main/README.md#additional-methods)).
 
-The same applies when there is a need to expose a specific quantity - it's loud & clear what the exposed value is.
+The same clarity applies when exposing a specific quantity - it's loud & clear what the exposed value is.
 
 ## The API Solution
 
-Back to the API...
+Back to API design...
 
-So far, we’ve addressed unit handling in code, but what about API design? We still need to specify a concrete unit for numeric values in JSON (or other textual formats). we still have to specify a field like `lengthInMeters` for unit representations.
+So far, we’ve addressed units handling in code, but what about API design? We still need to specify a concrete unit for numeric values in JSON (or other textual formats). we still have to specify a field like `lengthInMeters` for unit representations.
 
-The solution? A **unit DTO (Data Transfer Object)** that contains both the value and the unit of measurement.
+The solution? A **unit DTO (Data Transfer Object)** that includes both the value and its unit of measurement.
 
-This way, the API can accept and return values in any unit, as long as the unit is explicitly specified.
+This allows the API to accept and return values in any unit, as long as the unit is explicitly specified.
 
 For example:
 

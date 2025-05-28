@@ -45,11 +45,13 @@ func main() {
 package security
 
 import (
-   "github.com/gopher-fleece/runtime"
-   "github.com/gofiber/fiber/v2"
+    "context"
+
+    "github.com/gofiber/fiber/v2"
+    "github.com/gopher-fleece/runtime"
 )
 
-func GleeceRequestAuthorization(ctx *fiber.Ctx, check runtime.SecurityCheck) *runtime.SecurityError {
-   return nil
+func GleeceRequestAuthorization(ctx context.Context, fiberCtx *fiber.Ctx, check runtime.SecurityCheck) (context.Context, *runtime.SecurityError) {
+    return ctx, nil
 }
 ```

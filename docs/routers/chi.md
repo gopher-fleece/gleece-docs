@@ -47,12 +47,13 @@ func main() {
 package security
 
 import (
-   "net/http"
-
-   "github.com/gopher-fleece/runtime"
+    "context"
+    "net/http"
+    
+    "github.com/gopher-fleece/runtime"
 )
 
-func GleeceRequestAuthorization(r *http.Request, check runtime.SecurityCheck) *runtime.SecurityError {
-   return nil
+func GleeceRequestAuthorization(ctx context.Context, r *http.Request, check runtime.SecurityCheck) (context.Context, *runtime.SecurityError) {
+    return ctx, nil
 }
 ```

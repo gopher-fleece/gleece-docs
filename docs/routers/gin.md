@@ -45,11 +45,13 @@ func main() {
 package security
 
 import (
+    "context"
+
     "github.com/gin-gonic/gin"
     "github.com/gopher-fleece/runtime"
 )
 
-func GleeceRequestAuthorization(ctx *gin.Context, check runtime.SecurityCheck) *runtime.SecurityError {
-    return nil
+func GleeceRequestAuthorization(ctx context.Context, ginCtx *gin.Context, check runtime.SecurityCheck) (context.Context, *runtime.SecurityError) {
+    return ctx, nil
 }
 ```

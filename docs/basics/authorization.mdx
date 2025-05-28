@@ -60,11 +60,11 @@ Set default security method to `openapiGeneratorConfig->defaultSecurity`.
 For example:
 ```json title="gleece.config.json"
 "defaultSecurity": {
-            "name": "securitySchemaName",
-            "scopes": [
-                "read",
-            ]
-        }
+    "name": "securitySchemaName",
+    "scopes": [
+        "read",
+    ]
+}
 ```
 
 #### Declare security in a controller
@@ -135,49 +135,64 @@ Create a function with this signature, according to your router engine choice:
 For `gin`:
 ```go title="auth/security.go"
 import (
+    "context"
+
     "github.com/gin-gonic/gin"
     "github.com/gopher-fleece/runtime"
 )
-func GleeceRequestAuthorization(ctx *gin.Context, check runtime.SecurityCheck) *runtime.SecurityError {
-    return nil
+
+func GleeceRequestAuthorization(ctx context.Context, ginCtx *gin.Context, check runtime.SecurityCheck) (context.Context, *runtime.SecurityError) {
+    return ctx, nil
 }
 ```
 
 For `echo`
 ```go title="auth/security.go"
 import (
+    "context"
+
     "github.com/gopher-fleece/runtime"
     "github.com/labstack/echo/v4"
 )
 
-func GleeceRequestAuthorization(ctx *gin.Context, check runtime.SecurityCheck) *runtime.SecurityError {
-    return nil
+func GleeceRequestAuthorization(ctx context.Context, echoCtx echo.Context, check runtime.SecurityCheck) (context.Context, *runtime.SecurityError) {
+    return ctx, nil
 }
 ```
 
 For `Fiber`
 ```go title="auth/security.go"
 import (
+    "context"
+
     "github.com/gofiber/fiber/v2"
     "github.com/gopher-fleece/runtime"
 )
 
-func GleeceRequestAuthorization(ctx *fiber.Ctx, check runtime.SecurityCheck) *runtime.SecurityError {
-    return nil
+func GleeceRequestAuthorization(ctx context.Context, fiberCtx *fiber.Ctx, check runtime.SecurityCheck) (context.Context, *runtime.SecurityError) {
+    return ctx, nil
 }
 ```
 
 For Gorilla's `Mux` and `chi`
 ```go title="auth/security.go"
 import (
+    "context"
     "net/http"
+    
     "github.com/gopher-fleece/runtime"
 )
 
-func GleeceRequestAuthorization(r *http.Request, check runtime.SecurityCheck) *runtime.SecurityError {
-    return nil
+func GleeceRequestAuthorization(ctx context.Context, r *http.Request, check runtime.SecurityCheck) (context.Context, *runtime.SecurityError) {
+    return ctx, nil
 }
 ```
+
+:::info
+The `ctx` parameter is intended to be enriched with contextual data such as `user-id`, `tenant-id`, and similar verified information. 
+
+Once enriched, return the updated `ctx` - it will be used as the request context in subsequent middlewares and route handlers.
+:::
 
 The function will be called from the generated routes once a request arrives, with route's context and the defined security and scopes.
 
@@ -191,10 +206,10 @@ By default, the error will be formatted as [rfc7807](https://datatracker.ietf.or
 
 For example:
 ```go title="auth/security.go"
-func GleeceRequestAuthorization(ctx *gin.Context, check runtime.SecurityCheck) *runtime.SecurityError {
-    return &runtime.SecurityError{
-            Message:    "Failed to authorize",
-            StatusCode: runtime.StatusUnauthorized,
+func GleeceRequestAuthorization(ctx context.Context, ginCtx *gin.Context, check runtime.SecurityCheck) (context.Context, *runtime.SecurityError) {
+    return ctx, &runtime.SecurityError{
+        Message:    "Failed to authorize",
+        StatusCode: runtime.StatusUnauthorized,
     }
 }
 ```
@@ -202,19 +217,19 @@ This will be returned with a 401 status code and the payload will be formatted a
 
 And this:
 ```go title="auth/security.go"
-func GleeceRequestAuthorization(ctx *gin.Context, check runtime.SecurityCheck) *runtime.SecurityError {
-    return &runtime.SecurityError{
-            Message:    "Failed to authorize",
-            StatusCode: runtime.StatusForbidden,
-               CustomError: &runtime.CustomError{
-                Payload: struct {
-                    Message     string `json:"message"`
-                    Description string `json:"description"`
-                }{
-                    Message:     "Custom error message",
-                    Description: "Custom error description",
-                },
+func GleeceRequestAuthorization(ctx context.Context, ginCtx *gin.Context, check runtime.SecurityCheck) (context.Context, *runtime.SecurityError) {
+    return ctx, &runtime.SecurityError{
+        Message:    "Failed to authorize",
+        StatusCode: runtime.StatusForbidden,
+           CustomError: &runtime.CustomError{
+            Payload: struct {
+                Message     string `json:"message"`
+                Description string `json:"description"`
+            }{
+                Message:     "Custom error message",
+                Description: "Custom error description",
             },
+        },
     }
     
     return nil

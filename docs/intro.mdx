@@ -137,20 +137,21 @@ Inside the file, paste the following code. Later on, modify the logic in `Gleece
 package auth
 
 import (
+	"context"
+
 	"github.com/gin-gonic/gin"
 	"github.com/gopher-fleece/runtime"
 )
 
-func GleeceRequestAuthorization(ctx *gin.Context, check runtime.SecurityCheck) *runtime.SecurityError {
-
-	authHeader := ctx.GetHeader("Authorization")
+func GleeceRequestAuthorization(ctx context.Context, ginCtx *gin.Context, check runtime.SecurityCheck) (context.Context, *runtime.SecurityError) {
+	authHeader := ginCtx.GetHeader("Authorization")
 	if authHeader == "change that condition...." {
-		return &runtime.SecurityError{
+		return ctx, &runtime.SecurityError{
 			StatusCode: 403,
 			Message:    "You are not authorized to read that API",
 		}
 	}
-	return nil
+	return ctx, nil
 }
 ```
 
@@ -182,7 +183,7 @@ type UsersController struct {
 // @Response(200) The user's information
 // @ErrorResponse(404) The user not found
 // @ErrorResponse(500) The error when process failed
-// @Security(securitySchemaName, { scopes: ["read:users" ] }) Consumer should pass this security schema
+// @Security(securitySchemaName, { scopes: ["read:users"] }) Consumer should pass this security schema
 func (ec *UsersController) GetUser(id string) (string, error) {
 	return "", nil
 }

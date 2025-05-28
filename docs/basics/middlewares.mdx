@@ -20,7 +20,8 @@ Each middleware receives the router's context (specific to the engine in use).
 
 For error events, the middleware also receives the error instance.
 
-Middlewares return a boolean value that determines the flow of execution:
+Middlewares return a `ctx` that will be used as the context in subsequent middlewares and route handlers 
+and a boolean value that determines the flow of execution:
 - `true`: Continue with the normal execution flow
 - `false`: Abort execution (typically used when the response has been handled within the middleware)
 
@@ -28,46 +29,46 @@ Middlewares return a boolean value that determines the flow of execution:
 
 ```go title="middlewares.go"
 // For Gin
-func MyMiddleware(ctx *gin.Context) bool {
-    return true
+func MyMiddleware(ctx context.Context, ginCtx *gin.Context) (context.Context, bool) {
+    return ctx, true
 }
 
 // For Echo
-func MyMiddleware(ctx echo.Context) bool {
-    return true
+func MyMiddleware(ctx context.Context, echoCtx echo.Context) (context.Context, bool) {
+    return ctx, true
 }
 
 // For Fiber
-func MyMiddleware(ctx *fiber.Ctx) bool {
-    return true
+func MyMiddleware(ctx context.Context, fiberCtx *fiber.Ctx) (context.Context, bool) {
+    return ctx, true
 }
 
 // For Gorilla Mux & Chi
-func MyMiddleware(w http.ResponseWriter, r *http.Request) bool {
-    return true
+func MyMiddleware(ctx context.Context, w http.ResponseWriter, r *http.Request) (context.Context, bool) {
+    return ctx, true
 }
 ```
 
 And similarly for errors middlewares:
 ```go title="middlewares.go"
 // For Gin
-func MyErrorMiddleware(ctx *gin.Context, err error) bool {
-    return true
+func MyErrorMiddleware(ctx context.Context, ginCtx *gin.Context, err error) (context.Context, bool) {
+    return ctx, true
 }
 
 // For Echo
-func MyErrorMiddleware(c echo.Context, err error) bool {
-    return true
-}
-
-// For Gorilla Mux & Chi
-func MyErrorMiddleware(w http.ResponseWriter, r *http.Request, err error) bool {
-    return true
+func MyErrorMiddleware(ctx context.Context, echoCtx echo.Context, err error) (context.Context, bool) {
+    return ctx, true
 }
 
 // For Fiber
-func MyErrorMiddleware(ctx *fiber.Ctx, err error) bool {
-    return true
+func MyErrorMiddleware(ctx context.Context, fiberCtx *fiber.Ctx, err error) (context.Context, bool) {
+    return ctx, true
+}
+
+// For Gorilla Mux & Chi
+func MyErrorMiddleware(ctx context.Context, w http.ResponseWriter, r *http.Request, err error) (context.Context, bool) {
+    return ctx, true
 }
 ```
 
@@ -80,7 +81,9 @@ Example:
 package main
 
 import (
+    "context"
     "net/http"
+    "time"
 
     gleeceRoutes "<package>"
 
@@ -88,19 +91,24 @@ import (
     "github.com/gin-gonic/gin"
 )
 
-func LogBeforeOperationMiddleware(ctx *gin.Context) bool {
-    println("Method:", ctx.Request.Method, "Path:", ctx.Request.URL.Path, "arrived")
-    return true
+const arriveTimeKey ctxKey = "arrive-time"
+
+func LogBeforeOperationMiddleware(ctx context.Context, ginCtx *gin.Context) (context.Context, bool) {
+    println("Method:", ginCtx.Request.Method, "Path:", ctx.Request.URL.Path, "arrived")
+    ctx = context.WithValue(ctx, arriveTimeKey, time.Now())
+    return ctx, true
 }
 
-func LogAfterOperationSuccessMiddleware(ctx *gin.Context) bool {
-    println("Method:", ctx.Request.Method, "Path:", ctx.Request.URL.Path, "completed")
-    return true
+func LogAfterOperationSuccessMiddleware(ctx context.Context, ginCtx *gin.Context) (context.Context, bool) {
+    if arrive, ok := ctx.Value(arriveTimeKey).(time.Time); ok {
+        println("Method:", ginCtx.Request.Method, "Path:", ginCtx.Request.URL.Path, "completed in ", time.Since(arrive)) 
+    }
+    return ctx, true
 }
 
-func LogOnErrorMiddleware(ctx *gin.Context, err error) bool {
-    println("Method:", ctx.Request.Method, "Path:", ctx.Request.URL.Path, "failed with error:", err.Error())
-    return true
+func LogOnErrorMiddleware(ctx context.Context, ginCtx *gin.Context, err error) (context.Context, bool) {
+    println("Method:", ginCtx.Request.Method, "Path:", ginCtx.Request.URL.Path, "failed with error:", err.Error())
+    return ctx, true
 }
 
 func main() {

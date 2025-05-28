@@ -57,8 +57,9 @@ Below are all the options with comments explaining each property:
                 "name": "securitySchemaName", // Mandatory - The name of the Security schema, this field will be used in the relevant Security annotations
                 "fieldName": "x-header-name", // Mandatory - The name of the field in the HTTP request
                 "type": "apiKey", // Mandatory - The type of authorization, see OpenAPI spec for options
-                "in": "header" // Mandatory - Where the authentication data will be held - see OpenAPI spec for options
-            }
+                "in": "header", // Mandatory - Where the authentication data will be held - see OpenAPI spec for options
+                // ... - The object supprts all other valid OpenAPI options inclusing  "schema" "flows" etc
+           }
         ],
         "defaultSecurity": { // Optional - The default security to set for routes without a security annotation on the route or the controller. Used as a fallback
             "name": "securitySchemaName", // Mandatory - A security schema name (defined in securitySchemes) to be used as default

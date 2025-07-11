@@ -31,7 +31,8 @@ Below are all the options with comments explaining each property:
         "templateOverrides": { // Optional - *Override* and replace selected engine templates. Key is the template name and value is the path of the custom template
             "ResponseHeaders": "./gin.custom.response.headers.hbs"
         },
-		"validateResponsePayload": false // Optional - If set to true, Gleece will validate the response payload against the response schema defined in the route
+		"validateResponsePayload": false, // Optional - If set to true, Gleece will validate the response payload against the response schema defined in the route
+  		"skipGenerateDateComment": false // Optional - If set to true, Gleece will not generate the date comment at the top of the generated routes file
     },
     "openapiGeneratorConfig": { // Mandatory
         "openapi": "3.0.0", // Mandatory - The OpenAPI specification version to generate. Available options: "3.0.0", "3.1.0"

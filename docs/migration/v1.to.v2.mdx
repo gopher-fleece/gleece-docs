@@ -1,0 +1,24 @@
+---
+sidebar_position: 2
+---
+
+# 1.x.x to 2.x.x
+
+*Gleece* 2.x.x is a complete overhaul of the framework's internal machinery.
+
+While most changes are transparent and require no modification to existing projects,
+some projects using *Gleece*'s advanced features, such as template overrides, may require some adaptations.
+
+
+Below are the changes made that could potentially affect migrations.
+
+
+| Category     | Section                        | Description                                                             | Resolution                                                                                                                 |
+|--------------|--------------------------------|-------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------|
+| Templating   | imports.hbs                    | No longer use the `Controllers` field iteration logic                   | Migrate logic to reside beside `{{{UnpackImportsMap Imports}}}`                                                            |
+| Templating   | request.args.parsing.hbs       | `FullyQualifiedPackage` has been re-named `PkgPath`                     | Replace usages of `FullyQualifiedPackage` with `PkgPath`                                                                   |
+| Templating   | request.switch.param.type.hbs  | `EntityKind` enumeration has been replaced by `SymbolKind`              | Replace usages of `EntityKind` with `SymbolKind` where applicable.                                                         |
+| Internal API | All                            | Internal APIs and types have been significantly revamped                | No magic bullet here - if you were using any of the internal APIs, you may have to manually fix build errors as they occur |
+
+
+If you encounter a breaking change not listed here, please let us know!

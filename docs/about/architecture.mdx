@@ -1,0 +1,66 @@
+---
+sidebar_position: 2
+---
+
+# Architecture
+
+import { DarklightSelector } from '@site/src/components/DarklightSelector/DarklightSelector';
+
+
+At its core, *Gleece* is effectively a small transpiler;
+It takes simple annotations  (*e.g.* `// @Method(POST)`) and translates them into usable *Go* code.
+
+To facilitate this process, *Gleece* has several 'moving parts'.
+
+* A CLI
+* A semantic graph (high-level IR / attributed symbol graph)
+* Code Visitors
+* Validators
+* Reducers
+* Emitters
+* A templating engine
+* OpenAPI schema generators
+
+<br />
+
+The overall flow is as follows:
+
+1. Configuration is loaded
+
+2. A context containing a semantic graph, a set of caches (packages, entities, files) and other auxiliaries is created.
+
+3. *Go*'s own lexer/parser are invoked to obtain code ASTs.
+
+4. The ASTs are processed in a depth-first manner and fed into matching visitors.<br />
+   Relevant components such as controllers, receivers and types are processed and inserted into both graph and caches.
+
+5. The graph is enumerated and relevant component trees are passed to the validation layer
+
+6. Validation layer uses matching validators to process the HIR representation and emits diagnostics
+
+7. 
+	* In language server mode, diagnostics are fed back via *LSP* to the *Gleece* extension and rendered in the IDE.
+
+	* In CLI mode, the diagnostics are checked for blocking errors.<br />
+      If one or more blocking error is encountered, the pipeline is terminated.
+
+8. The *HIR* is *reduced* into a simple, flat *IR* structure
+
+9. Routing code is generated
+	1. The *IR* is passed over to the template engine alongside relevant template and code is emitted
+	2. The emitted code is cleaned, formatted and has its imports optimized by *go fmt*'s facilities
+
+10. OpenAPI schema is generated
+	1. The *IR* is passed over to the relevant (3.0.0/3.1.0) *OAS* generator and and a schema is built
+	2. The schema is validated via the relevant *OAS* validator and emitted.
+
+
+
+<br />
+<br />
+High-level diagram of the *Gleece* pipeline:
+
+<DarklightSelector 
+	contentLight={<img src="/img/architecture/gleece.hla.processing.light.svg" />}
+	contentDark={<img src="/img/architecture/gleece.hla.processing.dark.svg" />}
+/>

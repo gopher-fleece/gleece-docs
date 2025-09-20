@@ -1,0 +1,71 @@
+---
+sidebar_position: 1
+---
+
+# Philosophy and Concept
+
+
+APIs are a cornerstone of many applications - they provides means for parties such as application developers or customers
+to access your services and are often the 'face' of the product.
+
+Even the best of intentions, designs and implementations are often defeated by the sheer grinding force of day-to-day operations;
+Services change, developers come and go, integrations are formed and abandoned and the effort of maintaining our APIs in these conditions
+grows ever larger.
+
+Badly written or poorly maintained APIs frustrate everyone - they create constant friction where there should be none.
+
+
+*Gleece* aims to alleviate these pressures by providing quick and simple yet powerful development workflows
+whilst taking care of most of the 'dirty' maintenance work for you.
+
+<br />
+
+*Gleece*'s distinction is that it achieves this in an **almost purely design-time manner**.
+
+By combining rich, **fully deterministic**, code analysis faculties with industry standard tools and libraries 
+(such as the excellent [libopenapi](https://github.com/pb33f/libopenapi)) and a templating system, *Gleece* is able to generate, prior to build,
+fully working router code and matching OpenAPI schema.
+
+This allows us to generate optimized, *reflection*-free
+(depending on configuration - the internal [validator](https://github.com/go-playground/validator) **can** use it)
+code that is similar to human-written code in that it is completely readable and deterministic and can perform a wide
+range of tasks that would otherwise require large amounts of boilerplate or fragile code.
+
+
+By reducing the amount of boilerplate code developers have to write and engage with, we can significantly reduce the risk for
+several major pitfalls of API maintenance:
+
+* Missing authentication/authorization
+* Mismatched types/structs
+* Missing or mismatched documentation
+* Invalid OpenAPI schemas
+* Spaghetti code
+
+<br />
+
+But that's only part of the story;
+APIs, especially enterprise grade, require a whole slew of highly specialized features, often uniquely tailored to the specific application,
+or, put plainly, the worst thing a framework can do is prevent you from getting work done **your way**.
+
+As such, we've designed *Gleece* to be almost entirely un-opinionated and highly extensible.
+It Supports:
+
+* Most major routers in a "bring your own router" manner.
+* Various 'hooks' that can be run at different stages of each request such as before/after/on error
+* Template overrides which confer the ability to perform sweeping/low granularity changes over the generated routes
+  such as the addition of telemetry.
+
+* Template context injections - combined with template overrides, allows you to effectively develop custom annotations
+  and behaviors to intimately tailor each and every aspect of the generated routes.
+
+* Extremely* thin, no-dependency runtime layer - you are in full control of your dependencies (SSDLC, anyone?)
+
+<br />
+
+If you've read this far - thank you!
+
+We hope you enjoy working with *Gleece*
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;Y

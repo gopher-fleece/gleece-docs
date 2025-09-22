@@ -22,7 +22,7 @@ This document provides a comprehensive guide to all annotations and options supp
   - [Form Field Options](#form-field-options)
   - [Security Options](#security-options)
 
-# Overview
+### Overview
 
 - Gleece uses annotations to automatically generate routes & OpenAPI documentation. The format for the annotations is:
 
@@ -36,9 +36,9 @@ This document provides a comprehensive guide to all annotations and options supp
    - **Description**: This is an optional description that provides further details about the annotation. It helps in generating more descriptive documentation.
 
 
-# Paths Annotations
+### Paths Annotations
 
-## Class-Level Annotations - Controller
+#### Class-Level Annotations - Controller
 
 These annotations are used at the controller class level.
 
@@ -50,7 +50,7 @@ These annotations are used at the controller class level.
 | `@Description`| Provides a detailed description of the controller| -                  | -                                          | No       |         | 
 | `@Deprecated` | Marks the entire controller as deprecated        | -                  | -                                          | No       |         |
 
-## Function-Level Annotations - Route
+#### Function-Level Annotations - Route
 | Annotation         | Purpose                                                    | Parameter          | JSON5 Options Ref                     | Required | Comment |
 |--------------------|------------------------------------------------------------|--------------------|---------------------------------------|----------|---------| 
 | `@Method`          | Defines the HTTP method for the route                      | httpVerb           | -                                     | Yes      |         | 
@@ -66,17 +66,17 @@ These annotations are used at the controller class level.
 | `@Description`     | Provides a detailed description of the endpoint            | -                  | -                                     | No       |         | 
 | `@Deprecated`      | Marks the endpoint as deprecated                           | -                  | -                                     | No       |         |
 | `@Hidden`          | Hides the endpoint from API documentation                  | -                  | -                                     | No       |         |
-| `@TemplateContext` | Defines custom context data for templates                  | contextKey         | Any JSON5 object                      | No       | Supports multiple annotations with unique contextKey values. See [Custom Context](/docs/customizing/custom_context) for more details  |
+| `@TemplateContext` | Defines custom context data for templates                  | contextKey         | Any JSON5 object                      | No       | Supports multiple annotations with unique contextKey values. See [Custom Context](/docs/customization/custom_context) for more details  |
 
-# Schema Annotations
+### Schema Annotations
 
-## Struct Annotations - Schema
+#### Struct Annotations - Schema
 | Annotation      | Purpose                                                    | Parameter     | JSON5 Options Ref                 | Required | Comment |
 |-----------------|------------------------------------------------------------|--------------|------------------------------------|----------|---------| 
 | `@Description`  | Provides a detailed description of the schema              | -            | -                                  | No       |         | 
 | `@Deprecated`   | Marks the schema as deprecated                             | -            | -                                  | No       |         |
 
-## Field Annotations - Property
+#### Field Annotations - Property
 | Annotation      | Purpose                                                    | Parameter     | JSON5 Options Ref                 | Required | Comment |
 |-----------------|------------------------------------------------------------|--------------|------------------------------------|----------|---------| 
 | `@Description`  | Provides a detailed description of the property            | -            | -                                  | No       |         | 
@@ -84,43 +84,43 @@ These annotations are used at the controller class level.
 
 > A struct's property supported the standard json and validate in the field tag e.g. `json:"fieldName" validate:"required"`
 
-# Advanced Options
+### Advanced Options
 
-### Query Options
+#### Query Options
 
 | Field Name    | Description                                     | Default                   |
 |---------------|-------------------------------------------------|---------------------------|
 | `name`        | The name of the query in the HTTP request       | Function parameter name   |
 | `validate`    | Standard go-playground validation string        | -                         |
 
-### Path Options
+#### Path Options
 
 | Field Name    | Description                                     | Default                   |
 |---------------|-------------------------------------------------|---------------------------|
 | `name`        | The name of the path element in the HTTP request| Function parameter name   |
 | `validate`    | Standard go-playground validation string        | -                         |
 
-### Header Options
+#### Header Options
 
 | Field Name    | Description                                    | Default                   |
 |---------------|------------------------------------------------|---------------------------|
 | `name`        | The name of the header in the HTTP request     | Function parameter name   |
 | `validate`    | Standard go-playground validation string       | -                         |
 
-### Body Options
+#### Body Options
 
 | Field Name    | Description                                    | Default                   |
 |---------------|------------------------------------------------|---------------------------|
 | `validate`    | Standard go-playground validation string       | -                         |
 
-### Form Field Options
+#### Form Field Options
 
 | Field Name    | Description                                    | Default                   |
 |---------------|------------------------------------------------|---------------------------|
 | `name`        | The name of the form field in the request      | Function parameter name   |
 | `validate`    | Standard go-playground validation string       | -                         |
 
-### Security Options
+#### Security Options
 
 | Field Name    | Description                                    | Default                   |
 |---------------|------------------------------------------------|---------------------------|

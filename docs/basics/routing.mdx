@@ -65,9 +65,14 @@ For REST parameters a non-pointer arguments are always considered mandatory, reg
 :::info
 ### Parameter Types
 
-All HTTP request parameters can be only primitives, primitives aliases/enums or pointers to primitives types.
+HTTP request parameters support the following types:
+- Primitives (e.g., `string`, `int`, `bool`)
+- Primitive aliases and enums
+- Pointers to primitive types
 
-Except for `@Body` that supports only non-primitive types.
+**Arrays:** `@Query` and `@Body` can also accept arrays of primitives or their aliases/enums.
+
+**Non-primitives:** Only `@Body` supports non-primitive types (structs, objects).
 
 :::
 

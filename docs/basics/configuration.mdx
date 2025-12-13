@@ -8,13 +8,14 @@ The Gleece configuration file, usually named `gleece.config.json`, contains all 
 
 Below are all the options with comments explaining each property:
 
-```json title="gleece.config.json"
+```json5 title="gleece.config.json"
 {
     "commonConfig": { // Mandatory
         "controllerGlobs": [ // Mandatory with minimum one path - These paths are the directories/files where Gleece will search for controllers and types/structs. Defining controllers/types outside these paths will result in them being ignored or cause build errors. In this example, it will search in the entire codebase.
             "./*.go",
             "./**/*.go"
-        ]
+        ],
+        "allowPackageLoadFailures": false // Optional - If set to true, Gleece will ignore package load failures and continue processing. (e.g., if some files have syntax errors, missing properties, etc.)
     },
     "routesConfig": { // Mandatory
         "engine": "gin", // Mandatory - The router engine to generate routes for. Available options: "gin", "echo", "mux", "chi", "fiber"

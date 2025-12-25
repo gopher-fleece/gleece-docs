@@ -23,7 +23,7 @@ Below are all the options with comments explaining each property:
         "outputPath": "./routes/gleece.routes.go", // Mandatory - The path of the generated routes
         "outputFilePerms": "0644", // Optional - Set Linux permissions for the generated routes go file
         "authorizationConfig": { // Mandatory
-            "authFileFullPackageName": "<package>", // Mandatory - The package where the authorization function "GleeceRequestAuthorization" is implemented (e.g. github.com/gopher-fleece/gleece/auth)
+            "authFileFullPackageName": "<package>", // Mandatory - The package where the authorization function "GleeceRequestAuthorization" is implemented (e.g. github.com/gopher-fleece/gleece/v2/auth)
             "enforceSecurityOnAllRoutes": true // Optional - Enforce during generation time that every route has at least one direct/inherited security annotation
         },
         "templateExtensions": { // Optional - Extend routes templates. Key is the extension name and value is the path of the template extension

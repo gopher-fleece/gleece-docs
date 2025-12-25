@@ -11,7 +11,7 @@ The [Chi v5](https://github.com/go-chi/chi) router is supported by Gleece's rout
 In the Gleece configuration (usually `gleece.config.json`), set the `routesConfig->engine` to `chi`.
 
 ### Configure Security Function
-In the Gleece configuration, set the full package path in `routesConfig->authorizationConfig->authFileFullPackageName` (e.g., `github.com/gopher-fleece/gleece/security`).
+In the Gleece configuration, set the full package path in `routesConfig->authorizationConfig->authFileFullPackageName` (e.g., `github.com/gopher-fleece/gleece/v2/security`).
 
 ### Generate Routes File 
 Gleece CLI will generate a routes file from your annotated controllers. The output file path is specified in the `routesConfig->outputPath` property of your Gleece configuration file.

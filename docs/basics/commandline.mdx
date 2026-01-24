@@ -1,0 +1,97 @@
+---
+sidebar_position: 2
+---
+
+# Command Line interface
+
+Gleece is designed to run in CI/CD flows and during builds.
+As such, it provides a command line interface (CLI) from which all operations can be invoked.
+
+Detailed below are the available commands.
+
+---
+
+### Global Flags
+
+The following flags are supported for all commands:
+
+* `--no-banner` - Disables the printing of Gleece's banner during execution
+* `-v`|`--verbosity <level>` - Controls the logger's verbosity where lower values means greater verbosity.
+
+Available values are:
+
+* `0` - All
+* `1` - Debug
+* `2` - Info
+* `3` - Warn
+* `4` - Error
+* `5` - Fatal
+* `6` - None
+
+---
+
+### Version
+
+Prints information about Gleece's version to `stdout`.  
+Version information includes:
+* Version
+* Build date
+* Commit
+* Target architechture
+* Target platform
+
+**Usage:** `gleece version`
+
+**Context:** Standalone primary command
+
+**Example:** `gleece version`
+
+**Flags:** None
+
+---
+
+### Generate
+
+Analyzess a project and emits usable code or other artifacts
+
+**Usage:** `gleece generate <routes|spec|spec-and-routes> [options]`
+
+**Context:** Primary command
+
+**Example:** `gleece generate spec -c "./acme/gleece.config.json"`
+
+**Flags:**
+* `[-c|--config <config-path>]` - The path to the Gleece configuration file.  
+Defaults to `./gleece.config.json`
+
+**Sub Commands:**
+
+* `routes` - Create a routing file
+* `spec` - Create an *OpenAPI* schema
+* `spec-and-routes` - Create both a routing file and an *OpenAPI* schema
+
+
+---
+
+### Dump
+
+Retrieves information about Gleece's internal state.  
+This command is primarily used for visual inspection or troubleshooting.
+
+**Usage:** `gleece dump <type>`
+
+**Context:** Primary command
+
+**Example:** `gleece dump graph`
+
+**Flags:**
+* `[-c|--config <config-path>]` - The path to the Gleece configuration file.  
+Defaults to `./gleece.config.json`
+
+**Sub Commands:**
+
+* `graph` - Analyzes a project and dumps Gleece's internal HIR graph to `stdout`
+  - **Flags:**
+    * `format` - The format to output the graph to. Valid values are: `dot`
+
+---

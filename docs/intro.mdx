@@ -8,7 +8,7 @@ Let's run **Gleece**.
 
 ## Configure Service
 
-Gleece integrates into an existing server with a router.
+*Gleece* integrates into an existing server with a router.
 
 
 :::info
@@ -74,7 +74,11 @@ The `github.com/gopher-fleece/gleece/v2` package is only used during build time 
 
 ## Gleece Configuration
 
-Create a basic `Gleece` configuration file named `gleece.config.json`:
+*Gleece* uses a centralized configuration file named `gleece.config.json`.  
+You may create this configuration by hand or by using the [`gleece init`](/docs/basics/commandline#init) command.
+
+A basic configuration file may look like:
+
 ```json title="gleece.config.json"
 {
 	"commonConfig": {
@@ -193,7 +197,7 @@ Every route function must declare at least one return type: `error`. For operati
 
 :::tip
 
-To enhance your development experience with Gleece, we provide an official [VSCode extension](https://marketplace.visualstudio.com/items?itemName=haim-kastner.gleece-extension) that provides intelligent annotation highlighting and improved code visibility.
+To enhance your development experience with Gleece, we provide an official [Visual Studio Code extension](https://marketplace.visualstudio.com/items?itemName=haim-kastner.gleece-extension) that provides intelligent annotation highlighting and improved code visibility.
 
 Read more about it in [IDE Integration](/docs/category/ide-integration).
 
